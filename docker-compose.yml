@@ -1,0 +1,18 @@
+services:
+  server:
+    build: ./server
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./server:/app
+    environment:
+      - NODE_ENV=development
+
+  client:
+    build: ./client
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./client:/app
+    environment:
+      - NODE_ENV=development
