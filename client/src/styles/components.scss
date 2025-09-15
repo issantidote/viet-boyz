@@ -1,3 +1,4 @@
+@import "../styles/colors.scss";
 
 // For the Top Banner
 .banner {
@@ -5,7 +6,7 @@
   top: 0;
   left: 0;
   width: 100%;
-  background-color: red;
+  background-color: $primary-red;
   color: white;
   text-align: left;
   padding: 20px 10px;
