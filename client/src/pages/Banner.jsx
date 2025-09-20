@@ -3,8 +3,13 @@ import "../styles/components.scss";
 
 const Banner = () => {
   return (
-    <div className="banner">
-      UH Student Event Planner
+    <div>
+      <div className="banner_red">UH Student Event Planner</div>
+      <div className="banner_white">
+        <div>
+          Login
+        </div>
+      </div>
     </div>
   );
 };
