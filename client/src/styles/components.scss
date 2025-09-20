@@ -1,7 +1,15 @@
 @import "../styles/colors.scss";
 
-// For the Top Banner
-.banner {
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+// For the Top Red Banner
+.banner_red {
   position: fixed;
   top: 0;
   left: 0;
@@ -12,4 +20,37 @@
   padding: 20px 10px;
   font-weight: bold;
   z-index: 1000;
+}
+
+.banner_white {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  width: 100%;
+  background-color: white;
+  color: $slate;
+  text-align: left;
+  padding: 20px 10px;
+  font-weight: bold;
+  z-index: 1000;
+}
+
+.landing-page {
+  background: 
+    linear-gradient(to right, rgba(200, 16, 46, 0.7) 0%, 
+    rgba(200, 16, 46, 0.35) 20%,
+    rgba(200, 16, 46, 0)) 35%,
+    url("../assets/uh_hp_bg.jpg");
+  background-size: cover;
+  min-height: 100vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.landing-content {
+  text-align: right;
+  padding: 50px;
+  margin-top: 120px;
+  -webkit-text-stroke: 1.5px $custom-gray;
 }

@@ -1,11 +1,12 @@
 import React from "react";
 import Banner from "./Banner";
+import "../styles/components.scss";
 
 const LandingPage = () => {
   return (
-    <div>
+    <div className="landing-page">
       <Banner />
-      <div style={{ textAlign: "center", padding: "50px", marginTop: "60px" }}>
+      <div className="landing-content">
         <h1>Volunteer Application</h1>
         <p>This is our landing page, yayyyyyyy</p>
       </div>
