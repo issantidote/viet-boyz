@@ -1,15 +1,14 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "../styles/components.scss";
 
 const Banner = () => {
   return (
-    <div>
-      <div className="banner_red">UH Student Event Planner</div>
-      <div className="banner_white">
-        <div>
-          Login
-        </div>
-      </div>
+    <div className="banner">
+      <div className="banner-title">UH Student Event Planner</div>
+      <nav className="banner-nav">
+        <Link to="/profile" className="banner-link">Profile</Link>
+      </nav>
     </div>
   );
 };
