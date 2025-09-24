@@ -15,11 +15,15 @@ const Banner = () => {
         {/*Add white banner links here*/}
         <div>Home</div>
         <div>Events</div>
-        <div>Login</div>
-        <nav className="banner-nav">
+        <div>
+          <Link to="/login" className="banner-link">Login</Link>
+        </div>
+        <div>
           <Link to="/profile" className="banner-link">Profile</Link>
+        </div>
+        <div>
           <Link to="/volunteer-history" className="banner-link">Volunteer History</Link>
-      </nav>
+        </div>
       </div>
     </>
   );
