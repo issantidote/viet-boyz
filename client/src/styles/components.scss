@@ -19,12 +19,13 @@ html, body, #root {
   text-align: left;
   padding: 20px 10px;
   font-weight: bold;
+  font-size: 40px;
   z-index: 1000;
 }
 
 .banner_white {
   position: fixed;
-  top: 60px;
+  top: 100px;
   left: 0;
   width: 100%;
   background-color: white;
@@ -33,6 +34,10 @@ html, body, #root {
   padding: 20px 10px;
   font-weight: bold;
   z-index: 1000;
+}
+
+/* This is for the class in Banner.jsx added by Nathan. It has no features. */
+.banner_link {
 }
 
 .landing-page {

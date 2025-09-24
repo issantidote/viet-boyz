@@ -5,7 +5,9 @@ import "../styles/components.scss";
 const LandingPage = () => {
   return (
     <div className="landing-page">
-      <Banner />
+      <div>
+        <Banner />
+      </div>
       <div className="landing-content">
         <h1>Volunteer Application</h1>
         <p>This is our landing page, yayyyyyyy</p>
