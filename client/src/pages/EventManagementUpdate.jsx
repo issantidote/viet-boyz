@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { Link } from "react-router-dom";
+import "../styles/components.scss";
 
 const EventManagementNew = () => {
   const [formData, setFormData] = useState({
@@ -338,11 +340,20 @@ const EventManagementNew = () => {
           {/* Header */}
           <div className="profile-header">
             <h2>Event Management</h2>
-            <p>Create a new event</p>
+            <p>Edit An Event</p>
           </div>
 
           {/* Form Body */}
           <div className="profile-body">
+
+            {/*  Event */}
+            <div className="mb-5">  
+              <div className="form-group-custom">
+                <label className="form-label-custom">
+                  <Link to="/event-management">Create A New Event</Link> <span style={{color: 'rgb(150, 12, 34)'}}></span>
+                </label>
+              </div>
+            </div>
 
             {/*  Event */}
             <div className="mb-5">  
