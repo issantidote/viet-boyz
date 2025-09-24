@@ -23,13 +23,14 @@ html, body, #root {
   text-align: left;
   padding: 20px 10px;
   font-weight: bold;
+  font-size: 40px;
   z-index: 1000;
 }
 
 // For the white banner below the red one
 .banner_white {
   position: fixed;
-  top: 60px;
+  top: 100px;
   left: 0;
   width: 100%;
   background-color: white;
