@@ -8,6 +8,7 @@ const Banner = () => {
       <div className="banner-title">UH Student Event Planner</div>
       <nav className="banner-nav">
         <Link to="/profile" className="banner-link">Profile</Link>
+        <Link to="/volunteer-history" className="banner-link">Volunteer History</Link>
       </nav>
     </div>
   );
