@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 // add pages here:
 import LandingPage from './pages/LandingPage';
 import UserProfileManagement from './pages/UserProfileManagement';
+import VolunteerHistory from './pages/VolunteerHistory';
 
 const AppRoutes = () => {
     return (
@@ -12,6 +13,7 @@ const AppRoutes = () => {
                 {/* Add routes here */}
                 <Route path='/' element={<LandingPage />} />
                 <Route path='/profile' element={<UserProfileManagement />} />
+                <Route path='/volunteer-history' element={<VolunteerHistory />} />
                 {/* <Route path='/...' element={ <... /> }/> */}
             </Routes>
         </Router>
