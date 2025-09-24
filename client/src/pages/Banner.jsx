@@ -13,7 +13,9 @@ const Banner = () => {
       {/* White banner*/}
       <div className="banner_white">
         {/*Add white banner links here*/}
-        <div>Home</div>
+        <div>
+          <Link to="/" className="banner-link">Home</Link>
+        </div>
         <div>Events</div>
         <div>
           <Link to="/login" className="banner-link">Login</Link>
