@@ -1,11 +1,14 @@
-@import "../styles/colors.scss";
+@use "../styles/colors.scss" as *;
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=League+Gothic&display=swap');
 
 html, body, #root {
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  overflow-y: auto;
 }
 
 // For the Top Red Banner
@@ -13,6 +16,7 @@ html, body, #root {
   position: fixed;
   top: 0;
   left: 0;
+  height: 30px;
   width: 100%;
   background-color: $primary-red;
   color: white;
@@ -23,6 +27,7 @@ html, body, #root {
   z-index: 1000;
 }
 
+// For the white banner below the red one
 .banner_white {
   position: fixed;
   top: 100px;
@@ -34,12 +39,28 @@ html, body, #root {
   padding: 20px 10px;
   font-weight: bold;
   z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 20px;     
+  padding: 10px 20px;
+  height: 30px;
 }
 
-/* This is for the class in Banner.jsx added by Nathan. It has no features. */
-.banner_link {
+// White banner styling
+.banner_white > div,
+.banner_white .banner-link {
+  display: inline-block;
+  text-decoration: none;
+  color: inherit;
 }
 
+// Styling for Banner Links
+.banner-link {
+  font-family: "Source Sans 3", sans-serif;
+  font-weight: bold;
+}
+
+// styling and background image on front page
 .landing-page {
   background: 
     linear-gradient(to right, rgba(200, 16, 46, 0.7) 0%, 
@@ -47,15 +68,120 @@ html, body, #root {
     rgba(200, 16, 46, 0)) 35%,
     url("../assets/uh_hp_bg.jpg");
   background-size: cover;
+  background-attachment: fixed;
   min-height: 100vh;
   width: 100%;
   margin: 0;
   padding: 0;
 }
 
+// Text on front page
 .landing-content {
   text-align: right;
   padding: 50px;
   margin-top: 120px;
   -webkit-text-stroke: 1.5px $custom-gray;
 }
+
+// THE FOLLOWING ELEMENTS ARE USED ON THE LOGIN & USER REGISTRATION FORMS
+
+.form-page {
+  min-height: 100vh;
+  padding-top: 60px;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background: #f5f5f5;
+  box-sizing: border-box;
+}
+
+.form-card {
+  margin-top: 100px;
+  background: white;
+  padding: 40px 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  width: 350px;
+  text-align: center;
+  margin-bottom: 40px; 
+}
+
+.form-title {
+  font-family: 'League Gothic', sans-serif;
+  font-size: 36px;
+  margin-bottom: 30px;
+  color: black;
+  text-align: left;
+}
+
+.form-style {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .form-label {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+  }
+
+  .form-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+}
+
+.form-input {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.forgot-password {
+  text-align: right;
+  font-size: 14px;
+  color: #888;
+  cursor: pointer;
+}
+
+.form-button {
+  background: #c8102e; 
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 25px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.form-button:hover {
+  background: #a00b22;
+}
+
+.register-text {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #555;
+}
+
+.register-link {
+  color: #c8102e;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+// END OF LOGIN & USER FORM STYLING
