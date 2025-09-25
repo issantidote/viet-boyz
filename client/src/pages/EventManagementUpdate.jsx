@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from "react-router-dom";
 import "../styles/components.scss";
+import "../styles/colors.scss";
 
 const EventManagementNew = () => {
   const [formData, setFormData] = useState({
@@ -105,235 +106,6 @@ const EventManagementNew = () => {
 
   return (
     <>
-      {/* Keeping this here until it is properly integrated into the components */}
-      <style>{`
-        .profile-container {
-          min-height: 100vh;
-          background: linear-gradient(135deg, rgb(255, 249, 217) 0%, rgb(246, 190, 0) 100%);
-          padding: 0;
-          width: 100vw;
-        }
-        .profile-card {
-          width: 100%;
-          max-width: none;
-          margin: 0;
-          box-shadow: 0 20px 40px rgba(200, 16, 46, 0.15);
-          border: none;
-          overflow: hidden;
-        }
-        .profile-header {
-          background: linear-gradient(135deg, rgb(200, 16, 46) 0%, rgb(150, 12, 34) 100%);
-          color: white;
-          padding: 30px;
-          text-align: center;
-        }
-        .profile-header h2 {
-          margin: 0;
-          font-size: 2.2rem;
-          font-weight: 300;
-          letter-spacing: 1px;
-        }
-        .profile-header p {
-          margin: 10px 0 0 0;
-          opacity: 0.9;
-          font-size: 1.1rem;
-        }
-        .profile-body {
-          padding: 60px;
-          background: white;
-          margin: 20px;
-        }
-        .section-header {
-          display: flex;
-          align-items: center;
-          margin-bottom: 25px;
-          padding-bottom: 15px;
-          border-bottom: 2px solid rgb(246, 190, 0);
-        }
-        .section-icon {
-          background: linear-gradient(135deg, rgb(200, 16, 46) 0%, rgb(150, 12, 34) 100%);
-          color: white;
-          width: 40px;
-          height: 40px;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          margin-right: 15px;
-          font-size: 1.2rem;
-        }
-        .section-title {
-          color: rgb(84, 88, 90);
-          font-size: 1.4rem;
-          font-weight: 600;
-          margin: 0;
-        }
-        .form-group-custom {
-          margin-bottom: 25px;
-        }
-        .form-label-custom {
-          display: block;
-          margin-bottom: 8px;
-          font-weight: 500;
-          color: rgb(84, 88, 90);
-          font-size: 0.95rem;
-        }
-        .form-control-custom {
-          width: 100%;
-          padding: 15px 20px;
-          border: 2px solid rgb(136, 139, 141);
-          border-radius: 12px;
-          font-size: 1rem;
-          transition: all 0.3s ease;
-          background: rgb(255, 249, 217);
-          color: rgb(84, 88, 90);
-        }
-        .form-control-custom:focus {
-          outline: none;
-          border-color: rgb(200, 16, 46);
-          background: white;
-          box-shadow: 0 0 0 4px rgba(200, 16, 46, 0.1);
-        }
-        .form-control-custom.error {
-          border-color: rgb(150, 12, 34);
-          background: #fdf2f2;
-        }
-        .skills-container-custom {
-          border: 2px solid rgb(136, 139, 141);
-          border-radius: 12px;
-          padding: 25px;
-          background: rgb(255, 249, 217);
-          max-height: 280px;
-          overflow-y: auto;
-        }
-        .skills-grid-custom {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-          gap: 15px;
-        }
-        .skill-item-custom {
-          display: flex;
-          align-items: center;
-          padding: 12px;
-          background: white;
-          border-radius: 8px;
-          border: 1px solid rgb(246, 190, 0);
-          transition: all 0.3s ease;
-        }
-        .skill-item-custom:hover {
-          transform: translateY(-1px);
-          box-shadow: 0 4px 8px rgba(200, 16, 46, 0.15);
-          border-color: rgb(200, 16, 46);
-        }
-        .skill-checkbox-custom {
-          margin-right: 10px;
-          width: 18px;
-          height: 18px;
-          accent-color: rgb(200, 16, 46);
-        }
-        .date-tags-custom {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 10px;
-          margin-top: 15px;
-        }
-        .date-tag-custom {
-          background: linear-gradient(135deg, rgb(0, 179, 136) 0%, rgb(0, 134, 108) 100%);
-          color: white;
-          padding: 8px 15px;
-          border-radius: 20px;
-          font-size: 0.9rem;
-          display: flex;
-          align-items: center;
-          gap: 8px;
-        }
-        .remove-btn-custom {
-          background: rgba(255,255,255,0.3);
-          border: none;
-          color: white;
-          border-radius: 50%;
-          width: 20px;
-          height: 20px;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: background 0.3s ease;
-        }
-        .remove-btn-custom:hover {
-          background: rgba(255,255,255,0.5);
-        }
-        .btn-custom {
-          padding: 15px 30px;
-          border: none;
-          border-radius: 12px;
-          font-size: 1rem;
-          font-weight: 500;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-        }
-        .btn-primary-custom {
-          background: linear-gradient(135deg, rgb(200, 16, 46) 0%, rgb(150, 12, 34) 100%);
-          color: white;
-        }
-        .btn-primary-custom:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 8px 20px rgba(200, 16, 46, 0.4);
-          background: linear-gradient(135deg, rgb(150, 12, 34) 0%, rgb(100, 8, 23) 100%);
-        }
-        .btn-secondary-custom {
-          background: rgb(84, 88, 90);
-          color: white;
-        }
-        .btn-secondary-custom:hover {
-          background: rgb(136, 139, 141);
-          transform: translateY(-2px);
-          box-shadow: 0 8px 20px rgba(84, 88, 90, 0.4);
-        }
-        .error-message-custom {
-          color: rgb(150, 12, 34);
-          font-size: 0.875rem;
-          margin-top: 5px;
-          display: flex;
-          align-items: center;
-          gap: 5px;
-        }
-        .form-row-custom {
-          width: 50vw;
-          display: grid;
-          grid-template-columns: 2fr 1fr 1fr;
-          gap: 60px;
-        }
-        .selected-dates-title {
-          color: rgb(84, 88, 90);
-          margin-bottom: 15px;
-          font-weight: 500;
-        }
-        .actions-border {
-          border-top: 2px solid rgb(246, 190, 0);
-          padding-top: 30px;
-          display: flex;
-          justifyContent: flex-end;
-          gap: 15px;
-        }
-        @media (max-width: 768px) {
-          .form-row-custom {
-            grid-template-columns: 1fr;
-          }
-          .profile-container {
-            margin-top: 70px;
-            padding: 0;
-          }
-          .profile-body {
-            padding: 30px;
-          }
-          .profile-header h2 {
-            font-size: 1.8rem;
-          }
-        }
-      `}</style>
 
       <div className="profile-container">
         <div className="card profile-card">
@@ -350,7 +122,7 @@ const EventManagementNew = () => {
             <div className="mb-5">  
               <div className="form-group-custom">
                 <label className="form-label-custom">
-                  <Link to="/event-management">Create A New Event</Link> <span style={{color: 'rgb(150, 12, 34)'}}></span>
+                  <Link to="/event-management">Create A New Event</Link> <span style={{color: '$primary-red'}}></span>
                 </label>
               </div>
             </div>
@@ -359,7 +131,7 @@ const EventManagementNew = () => {
             <div className="mb-5">  
               <div className="form-group-custom">
                 <label className="form-label-custom">
-                  Event Name <span style={{color: 'rgb(150, 12, 34)'}}>*</span>
+                  Event Name <span style={{color: '$primary-red'}}>*</span>
                 </label>
                 <input
                   type="text"
@@ -384,7 +156,7 @@ const EventManagementNew = () => {
             <div className="mb-5">  
               <div className="form-group-custom">
                 <label className="form-label-custom">
-                  Description<span style={{color: 'rgb(150, 12, 34)'}}>*</span>
+                  Description<span style={{color: '$primary-red'}}>*</span>
                 </label>
                 <input
                   type="text"
@@ -408,7 +180,7 @@ const EventManagementNew = () => {
             <div className="mb-5">  
               <div className="form-group-custom">
                 <label className="form-label-custom">
-                  Location <span style={{color: 'rgb(150, 12, 34)'}}>*</span>
+                  Location <span style={{color: '$primary-red'}}>*</span>
                 </label>
                 <input
                   type="text"
@@ -433,7 +205,7 @@ const EventManagementNew = () => {
               
               <div className="form-group-custom">
                 <label className="form-label-custom">
-                  Skills <span style={{color: 'rgb(150, 12, 34)'}}>*</span>
+                  Skills <span style={{color: '$primary-red'}}>*</span>
                 </label>
                 <div className="skills-container-custom">
                   <div className="skills-grid-custom">
@@ -467,7 +239,7 @@ const EventManagementNew = () => {
               
               <div className="form-group-custom">
                   <label className="form-label-custom">
-                    Urgency <span style={{color: 'rgb(150, 12, 34)'}}>*</span>
+                    Urgency <span style={{color: '$primary-red'}}>*</span>
                   </label>
                   <select
                     name="urgency"
@@ -505,7 +277,7 @@ const EventManagementNew = () => {
 
               <div className="form-group-custom">
                 <label className="form-label-custom">
-                  Date of Event <span style={{color: 'rgb(150, 12, 34)'}}>*</span>
+                  Date of Event <span style={{color: '$primary-red'}}>*</span>
                 </label>
                 <input
                   type="date"
