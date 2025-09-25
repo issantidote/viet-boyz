@@ -91,7 +91,7 @@ html, body, #root {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  background: #f5f5f5;
+  background: white;
   box-sizing: border-box;
 }
 
@@ -129,13 +129,13 @@ html, body, #root {
     font-size: 14px;
     font-weight: bold;
     margin-bottom: 5px;
-    color: #333;
+    color: $slate;
   }
 
   .form-input {
     width: 100%;
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid $custom-gray;
     border-radius: 5px;
     font-size: 16px;
   }
@@ -143,7 +143,7 @@ html, body, #root {
 
 .form-input {
   padding: 12px 15px;
-  border: 1px solid #ddd;
+  border: 1px solid $cream;
   border-radius: 6px;
   font-size: 16px;
 }
@@ -151,12 +151,12 @@ html, body, #root {
 .forgot-password {
   text-align: right;
   font-size: 14px;
-  color: #888;
+  color: $custom-gray;
   cursor: pointer;
 }
 
 .form-button {
-  background: #c8102e; 
+  background: $primary-red; 
   color: white;
   padding: 12px;
   border: none;
@@ -168,19 +168,50 @@ html, body, #root {
 }
 
 .form-button:hover {
-  background: #a00b22;
+  background: $brick;
 }
 
 .register-text {
   margin-top: 20px;
   font-size: 14px;
-  color: #555;
+  color: $slate;
 }
 
 .register-link {
-  color: #c8102e;
+  color: $primary-red;
   cursor: pointer;
   font-weight: bold;
 }
+
+// For password checking
+.password-requirements {
+  margin: 10px 0;
+  text-align: left;
+
+  .requirement-item {
+    display: flex;
+    align-items: flex-start; // aligns icon with first line of text
+    margin-bottom: 4px;
+  }
+
+  .requirement-icon {
+    width: 20px; // ensures consistent spacing
+    flex-shrink: 0; // keeps icon from shrinking
+  }
+
+  .requirement-text {
+    flex: 1;
+    line-height: 1.4;
+
+    &.valid {
+      color: $custom-green;
+    }
+
+    &.invalid {
+      color: $primary-red;
+    }
+  }
+}
+
 
 // END OF LOGIN & USER FORM STYLING
