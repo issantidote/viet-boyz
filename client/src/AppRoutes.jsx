@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 // add pages here:
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/Login';
-import UserRegister from './pages/UserRegister';
+import UserRegister from './pages/UserRegister'; 
 import UserProfileManagement from './pages/UserProfileManagement';
 import VolunteerHistory from './pages/VolunteerHistory';
 import EventManagementNew from './pages/EventManagementNew';
