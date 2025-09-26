@@ -4,6 +4,43 @@ import "../styles/components.scss";
 import "../styles/colors.scss";
 
 const EventManagementNew = () => {
+  //used when getting the specific event to edit
+  const [eventName, setEventName] = useState(null);
+  //set to true if there is an event to edit (successfully selected)
+  const [eventFound, setEventFound] = useState(false);
+  //the events, pulled from DB
+  const [events, setEvents] = //useState(null);
+  //because backend and db is not set up yet, this will serve as placeholder data
+  useState([
+    {
+      eventID: 1,
+      eventName: 'fitness gram pacer test',
+      eventDescription: 'The FitnessGram Pacer Test is a multistage aerobic capacity test that progressively gets more difficult as it continues. The 20 meter pacer test will begin in 30 seconds. Line up at the start. The running speed starts slowly but gets faster each minute after you hear this signal. A single lap should be completed every time you hear this sound. Remember to run in a straight line and run as long as possible. The second time you fail to complete a lap before the sound, your test is over. The test will begin on the word start. On your mark. Get ready! Start.',
+      location: 'UH Rec Center',
+      skills: [1, 4],
+      urgency: 'Medium',
+      eventDate: new Date(2025, 10, 4, 12, 15)
+    },
+    {
+      eventID: 2,
+      eventName: 'i dunno',
+      eventDescription: 'i really am not sure what to put',
+      location: 'PGH room 212',
+      skills: [2, 3],
+      urgency: 'Low',
+      eventDate: new Date(2025, 10, 6, 17, 15)
+    },
+    {
+      eventID: 3,
+      eventName: 'chasing squirrels',
+      eventDescription: 'the squirrels on campus are so fat, so we need to chase them so that they can be skinny legends',
+      location: 'In front of the Library',
+      skills: [1, 4, 10],
+      urgency: 'High',
+      eventDate: new Date(2025, 10, 8, 2, 35)
+    }
+  ]);
+
   const [formData, setFormData] = useState({
     eventName: '',
     eventDescription: '',
@@ -104,6 +141,17 @@ const EventManagementNew = () => {
     setErrors({});
   };
 
+  const handleFill = () => {
+    setFormData({
+    eventName: eventName,
+    eventDescription: eventName,
+    location: eventName,
+    skills: [1,4],
+    urgency: 'High',
+    eventDate: new Date(2025, 10, 4, 12, 15)
+    });
+  };
+
   return (
     <>
 
@@ -118,11 +166,43 @@ const EventManagementNew = () => {
           {/* Form Body */}
           <div className="profile-body">
 
+            {/* Event selection */}
+            <div className="mb-5">
+              
+              <div className="form-group-custom">
+                  <label className="form-label-custom">
+                    Select an event to edit... <span className="required-asterisk">*</span>
+                  </label>
+                  <select
+                    //name="urgency"
+                    //value={formData.urgencies}
+                    //onChange={handleInputChange}
+                    //className={`form-control-custom ${errors.urgency ? 'error' : ''}`}
+                    className="form-control-custom"
+                    //id="eventName"
+                    name="eventName"
+                    required
+                    value={eventName}
+                    onChange={(e) => {setEventName(e.target.value); handleFill(e.target.value)}}
+                  >
+                   <option value="">Please select...</option>
+                    {events.map((event, index) => (
+                      <option key={index} value={event.eventName}>
+                        {event.eventName}
+                      </option>
+                    ))}
+                  </select>
+                  {/*
+                  if there's any errors, it'll need to be put here (reference urgencies)
+                  */}
+                </div>
+            </div>
+
             {/*  Event */}
             <div className="mb-5">  
               <div className="form-group-custom">
                 <label className="form-label-custom">
-                  <Link to="/event-management">Create A New Event</Link> <span style={{color: '$primary-red'}}></span>
+                  <Link to="/event-management">Create A New Event</Link> <span className="required-asterisk">*</span>
                 </label>
               </div>
             </div>
@@ -131,7 +211,7 @@ const EventManagementNew = () => {
             <div className="mb-5">  
               <div className="form-group-custom">
                 <label className="form-label-custom">
-                  Event Name <span style={{color: '$primary-red'}}>*</span>
+                  Event Name <span className="required-asterisk">*</span>
                 </label>
                 <input
                   type="text"
@@ -156,7 +236,7 @@ const EventManagementNew = () => {
             <div className="mb-5">  
               <div className="form-group-custom">
                 <label className="form-label-custom">
-                  Description<span style={{color: '$primary-red'}}>*</span>
+                  Description<span className="required-asterisk">*</span>
                 </label>
                 <input
                   type="text"
@@ -180,7 +260,7 @@ const EventManagementNew = () => {
             <div className="mb-5">  
               <div className="form-group-custom">
                 <label className="form-label-custom">
-                  Location <span style={{color: '$primary-red'}}>*</span>
+                  Location <span className="required-asterisk">*</span>
                 </label>
                 <input
                   type="text"
@@ -205,7 +285,7 @@ const EventManagementNew = () => {
               
               <div className="form-group-custom">
                 <label className="form-label-custom">
-                  Skills <span style={{color: '$primary-red'}}>*</span>
+                  Skills <span className="required-asterisk">*</span>
                 </label>
                 <div className="skills-container-custom">
                   <div className="skills-grid-custom">
@@ -239,7 +319,7 @@ const EventManagementNew = () => {
               
               <div className="form-group-custom">
                   <label className="form-label-custom">
-                    Urgency <span style={{color: '$primary-red'}}>*</span>
+                    Urgency <span className="required-asterisk">*</span>
                   </label>
                   <select
                     name="urgency"
@@ -277,7 +357,7 @@ const EventManagementNew = () => {
 
               <div className="form-group-custom">
                 <label className="form-label-custom">
-                  Date of Event <span style={{color: '$primary-red'}}>*</span>
+                  Date of Event <span className="required-asterisk">*</span>
                 </label>
                 <input
                   type="date"
