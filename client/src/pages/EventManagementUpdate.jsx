@@ -70,10 +70,9 @@ const EventManagementNew = () => {
 
   //various different levels of urgencies
   const urgencies = [
-    { id: '', name: 'Please determine event urgency.' },
-    { id: 'Low', name: 'Low' },
-    { id: 'Medium', name: 'Medium' },
-    { id: 'High', name: 'High' },
+    'Low',
+    'Medium',
+    'High'
   ];
 
   const handleInputChange = (e) => {
@@ -183,7 +182,7 @@ const EventManagementNew = () => {
                     name="eventName"
                     required
                     value={eventName}
-                    onChange={(e) => {setEventName(e.target.value); handleFill(e.target.value)}}
+                    onChange={(e) => {handleFill(e.target.value); setEventName(e.target.value)}}
                   >
                    <option value="">Please select...</option>
                     {events.map((event, index) => (
@@ -327,9 +326,10 @@ const EventManagementNew = () => {
                     onChange={handleInputChange}
                     className={`form-control-custom ${errors.urgency ? 'error' : ''}`}
                   >
+                    <option value="">Please select...</option>
                     {urgencies.map(urgency => (
-                      <option key={urgency.code} value={urgency.code}>
-                        {urgency.name}
+                      <option key={urgency} value={urgency}>
+                        {urgency}
                       </option>
                     ))}
                   </select>
@@ -350,9 +350,6 @@ const EventManagementNew = () => {
 
             {/* Date Section */}
             <div className="mb-5">
-              <div className="section-header">
-                <h3 className="section-title">Date</h3>
-              </div>
 
 
               <div className="form-group-custom">

@@ -32,10 +32,9 @@ const EventManagementNew = () => {
 
   //various different levels of urgencies
   const urgencies = [
-    { id: '', name: 'Please determine event urgency.' },
-    { id: 'Low', name: 'Low' },
-    { id: 'Medium', name: 'Medium' },
-    { id: 'High', name: 'High' },
+    'Low',
+    'Medium',
+    'High'
   ];
 
   const handleInputChange = (e) => {
@@ -247,9 +246,10 @@ const EventManagementNew = () => {
                     onChange={handleInputChange}
                     className={`form-control-custom ${errors.urgency ? 'error' : ''}`}
                   >
+                    <option value="">Please select...</option>
                     {urgencies.map(urgency => (
-                      <option key={urgency.code} value={urgency.code}>
-                        {urgency.name}
+                      <option key={urgency} value={urgency}>
+                        {urgency}
                       </option>
                     ))}
                   </select>
