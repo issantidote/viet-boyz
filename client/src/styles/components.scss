@@ -654,3 +654,9 @@ html, body, #root {
   }
 }
 // END OF USER PROFILE MANAGEMENT PAGE STYLING
+
+
+//this is used for forms to give the red font color specifically for the *
+.required-asterisk {
+  color: $primary-red;
+}

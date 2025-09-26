@@ -7,6 +7,8 @@ import LoginPage from './pages/Login';
 import UserRegister from './pages/UserRegister'; 
 import UserProfileManagement from './pages/UserProfileManagement';
 import VolunteerHistory from './pages/VolunteerHistory';
+import EventManagementNew from './pages/EventManagementNew';
+import EventManagementUpdate from './pages/EventManagementUpdate';
 
 const AppRoutes = () => {
     return (
@@ -18,6 +20,8 @@ const AppRoutes = () => {
                 <Route path='/user-register' element={<UserRegister/>} />
                 <Route path='/profile' element={<UserProfileManagement />} />
                 <Route path='/volunteer-history' element={<VolunteerHistory />} />
+                <Route path='/event-management' element={<EventManagementNew/>} />
+                <Route path='/event-management/edit' element={<EventManagementUpdate/>} />
                 {/* <Route path='/...' element={ <... /> }/> */}
             </Routes>
         </Router>
