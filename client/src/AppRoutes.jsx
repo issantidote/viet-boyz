@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LandingPage from './pages/LandingPage';
 import UserProfileManagement from './pages/UserProfileManagement';
 import VolunteerHistory from './pages/VolunteerHistory';
+import Notifications from "./pages/Notifications";
 
 const AppRoutes = () => {
     return (
@@ -14,6 +15,7 @@ const AppRoutes = () => {
                 <Route path='/' element={<LandingPage />} />
                 <Route path='/profile' element={<UserProfileManagement />} />
                 <Route path='/volunteer-history' element={<VolunteerHistory />} />
+                <Route path='/notifications' element={<Notifications />} />
                 {/* <Route path='/...' element={ <... /> }/> */}
             </Routes>
         </Router>

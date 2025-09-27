@@ -9,6 +9,7 @@ const Banner = () => {
       <nav className="banner-nav">
         <Link to="/profile" className="banner-link">Profile</Link>
         <Link to="/volunteer-history" className="banner-link">Volunteer History</Link>
+        <Link to='/notifications' className="banner-link">Notifications</Link>
       </nav>
     </div>
   );
