@@ -9,6 +9,7 @@ import UserProfileManagement from './pages/UserProfileManagement';
 import VolunteerHistory from './pages/VolunteerHistory';
 import EventManagementNew from './pages/EventManagementNew';
 import EventManagementUpdate from './pages/EventManagementUpdate';
+import VolunteerMatching from './pages/VolunteerMatching';
 
 const AppRoutes = () => {
     return (
@@ -22,6 +23,7 @@ const AppRoutes = () => {
                 <Route path='/volunteer-history' element={<VolunteerHistory />} />
                 <Route path='/event-management' element={<EventManagementNew/>} />
                 <Route path='/event-management/edit' element={<EventManagementUpdate/>} />
+                <Route path='/volunteer-matching' element={<VolunteerMatching/>} />
                 {/* <Route path='/...' element={ <... /> }/> */}
             </Routes>
         </Router>

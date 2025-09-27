@@ -3,11 +3,61 @@ import { Link } from "react-router-dom";
 import "../styles/components.scss";
 import "../styles/colors.scss";
 
-const EventManagementNew = () => {
-  //used when getting the specific event to edit
-  const [eventName, setEventName] = useState(null);
-  //set to true if there is an event to edit (successfully selected)
-  const [eventFound, setEventFound] = useState(false);
+const VolunteerMatching = () => {
+  //id number of volunteer
+  const [volunteerID, setVolunteerID] = useState(null);
+  
+  //list of all volunteers
+  const [volunteers, setVolunteers] =
+  //uses dummy placeholder data for now until truly hooked up to the db
+  useState([
+    {
+      fullName: 'Jonathan V',
+      address1: 'idk',
+      address2: '',
+      city: 'Missouri City',
+      state: 'Texas',
+      zipcode: 'my zip code',
+      skills: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      preferences: 'Please don\'t sign me up for an event please please please please please please :( :( :( :( :( :(',
+      availability: [new Date(2025, 10, 4), new Date(2025, 10, 6), new Date(2025, 10, 8), new Date(2025, 10, 27)]
+    },
+    {
+      fullName: 'Bryant T',
+      address1: 'umm',
+      address2: '',
+      city: 'Houston',
+      state: 'Texas',
+      zipcode: 'erm',
+      skills: [1, 3, 4, 5],
+      preferences: 'I\'m down for whatever',
+      availability: [new Date(2025, 10, 6), new Date(2025, 10, 8), new Date(2025, 10, 27)]
+    },
+    {
+      fullName: 'Isa T',
+      address1: 'we are not doxing ourselves lol',
+      address2: '',
+      city: 'Bellaire',
+      state: 'Texas',
+      zipcode: 'uhh',
+      skills: [2, 7],
+      preferences: 'Very much looking forward to volunteering! :)',
+      availability: [new Date(2025, 10, 4), new Date(2025, 10, 8), new Date(2025, 10, 27)]
+    },
+    {
+      fullName: 'Nathan T',
+      address1: 'n/a',
+      address2: 'n/a',
+      city: 'n/a',
+      state: 'Texas',
+      zipcode: 'n/a',
+      skills: [1,3,4],
+      preferences: 'n/a',
+      availability: [new Date(2025, 10, 4), new Date(2025, 10, 6), new Date(2025, 10, 27)]
+    }
+  ]);
+
+
   //the events, pulled from DB
   const [events, setEvents] = //useState(null);
   //because backend and db is not set up yet, this will serve as placeholder data
@@ -35,7 +85,7 @@ const EventManagementNew = () => {
       eventName: 'chasing squirrels',
       eventDescription: 'the squirrels on campus are so fat, so we need to chase them so that they can be skinny legends',
       location: 'In front of the Library',
-      skills: [1, 4, 10],
+      skills: [5, 7, 10],
       urgency: 'High',
       eventDate: new Date(2025, 10, 8, 2, 35)
     }
@@ -201,7 +251,7 @@ const EventManagementNew = () => {
             <div className="mb-5">  
               <div className="form-group-custom">
                 <label className="form-label-custom">
-                  <Link to="/event-management">Create A New Event</Link>
+                  <Link to="/event-management">Create A New Event</Link> <span className="required-asterisk">*</span>
                 </label>
               </div>
             </div>
@@ -406,4 +456,4 @@ const EventManagementNew = () => {
   );
 };
 
-export default EventManagementNew;
+export default VolunteerMatching;
