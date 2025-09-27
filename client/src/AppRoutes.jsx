@@ -7,9 +7,11 @@ import LoginPage from './pages/Login';
 import UserRegister from './pages/UserRegister'; 
 import UserProfileManagement from './pages/UserProfileManagement';
 import VolunteerHistory from './pages/VolunteerHistory';
+import Notifications from "./pages/Notifications";
 import EventManagementNew from './pages/EventManagementNew';
 import EventManagementUpdate from './pages/EventManagementUpdate';
 import VolunteerMatching from './pages/VolunteerMatching';
+
 
 const AppRoutes = () => {
     return (
@@ -21,6 +23,7 @@ const AppRoutes = () => {
                 <Route path='/user-register' element={<UserRegister/>} />
                 <Route path='/profile' element={<UserProfileManagement />} />
                 <Route path='/volunteer-history' element={<VolunteerHistory />} />
+                <Route path='/notifications' element={<Notifications />} />
                 <Route path='/event-management' element={<EventManagementNew/>} />
                 <Route path='/event-management/edit' element={<EventManagementUpdate/>} />
                 <Route path='/volunteer-matching' element={<VolunteerMatching/>} />
