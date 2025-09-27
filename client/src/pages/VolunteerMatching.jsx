@@ -429,7 +429,7 @@ const VolunteerMatching = () => {
                           <td className="volunteer-location">
                             {event.location}
                           </td>
-                          <td className="skills">
+                          <td className="volunteer-location">
                             {listSkills(event.skills)}
                           </td>
                           <td>
