@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/colors.scss";
+import "../styles/components.scss";
 
 
 /** @typedef {Object} EventItem
@@ -47,187 +47,84 @@ const MOCK_EVENTS = [
   },
 ];
 
-const getUrgencyStyle = (urgency) => {
+const getUrgencyClass = (urgency) => {
   switch (urgency) {
     case "High":
-      return { backgroundColor: "rgb(200, 16, 46)", color: "white" }; // primary-red
+      return "volunteer-urgency-high";
     case "Medium":
-      return { backgroundColor: "rgb(246, 190, 0)", color: "rgb(100, 8, 23)" }; // gold with chocolate text
+      return "volunteer-urgency-medium";
     case "Low":
-      return { backgroundColor: "rgb(0, 179, 136)", color: "white" }; // teal
+      return "volunteer-urgency-low";
     default:
-      return { backgroundColor: "rgb(136, 139, 141)", color: "white" }; // custom-gray
+      return "volunteer-urgency-default";
   }
 };
 
-const getStatusStyle = (status) => {
+const getStatusClass = (status) => {
   switch (status) {
     case "Started":
-      return { backgroundColor: "rgb(150, 12, 34)", color: "white" }; // brick
-    case "Not Start":
-      return { backgroundColor: "rgb(84, 88, 90)", color: "white" }; // slate
+      return "volunteer-status-started";
+    case "Not Started":
+      return "volunteer-status-not-started";
     case "Done":
-      return { backgroundColor: "rgb(0, 134, 108)", color: "white" }; // custom-green
+      return "volunteer-status-done";
     default:
-      return { backgroundColor: "rgb(136, 139, 141)", color: "white" }; // custom-gray
+      return "volunteer-status-default";
   }
 };
 
 export default function VolunteerHistory({ events = MOCK_EVENTS }) {
-  const volunteerHistoryStyles = {
-    container: {
-      maxWidth: "1200px",
-      margin: "0 auto",
-      padding: "2rem",
-      fontFamily: "Arial, sans-serif"
-    },
-    header: {
-      fontSize: "2.5rem",
-      fontWeight: "bold",
-      color: "rgb(200, 16, 46)", // primary-red
-      marginBottom: "2rem",
-      textAlign: "center",
-      borderBottom: `3px solid rgb(246, 190, 0)`, // gold
-      paddingBottom: "1rem"
-    },
-    tableContainer: {
-      backgroundColor: "rgb(255, 249, 217)", // cream
-      borderRadius: "12px",
-      padding: "1.5rem",
-      boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-      overflow: "auto"
-    },
-    table: {
-      width: "100%",
-      borderCollapse: "collapse",
-      backgroundColor: "white",
-      borderRadius: "8px",
-      overflow: "hidden",
-      boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)"
-    },
-    tableHeader: {
-      backgroundColor: "rgb(84, 88, 90)", // slate
-      color: "white"
-    },
-    th: {
-      padding: "1rem",
-      textAlign: "left",
-      fontWeight: "600",
-      fontSize: "0.95rem",
-      borderBottom: "2px solid rgb(200, 16, 46)" // primary-red
-    },
-    tr: {
-      borderBottom: "1px solid rgb(136, 139, 141)" // custom-gray
-    },
-    trHover: {
-      backgroundColor: "rgb(255, 249, 217)" // cream on hover
-    },
-    td: {
-      padding: "1rem",
-      verticalAlign: "top"
-    },
-    eventName: {
-      fontWeight: "600",
-      color: "rgb(100, 8, 23)", // chocolate
-      fontSize: "1.1rem"
-    },
-    description: {
-      maxWidth: "300px",
-      lineHeight: "1.4",
-      color: "rgb(84, 88, 90)" // slate
-    },
-    location: {
-      color: "rgb(150, 12, 34)", // brick
-      fontWeight: "500"
-    },
-    skillsContainer: {
-      display: "flex",
-      flexWrap: "wrap",
-      gap: "0.5rem"
-    },
-    skillBadge: {
-      backgroundColor: "rgb(0, 89, 80)", // forest
-      color: "white",
-      padding: "0.25rem 0.75rem",
-      borderRadius: "20px",
-      fontSize: "0.8rem",
-      fontWeight: "500"
-    },
-    badge: {
-      padding: "0.5rem 1rem",
-      borderRadius: "20px",
-      fontSize: "0.85rem",
-      fontWeight: "600",
-      textAlign: "center",
-      minWidth: "100px",
-      whiteSpace: "nowrap",
-      display: "inline-block"
-    },
-    emptyState: {
-      textAlign: "center",
-      padding: "3rem",
-      color: "rgb(136, 139, 141)", // custom-gray
-      fontSize: "1.2rem",
-      fontStyle: "italic"
-    }
-  };
-
   return (
-    <div style={volunteerHistoryStyles.container}>
-      <h1 style={volunteerHistoryStyles.header}>Volunteer History</h1>
+    <div className="volunteer-history-container">
+      <h1 className="volunteer-history-header">Volunteer History</h1>
 
-      <div style={volunteerHistoryStyles.tableContainer}>
-        <table style={volunteerHistoryStyles.table}>
-          <thead style={volunteerHistoryStyles.tableHeader}>
+      <div className="volunteer-table-container">
+        <table className="volunteer-table">
+          <thead className="volunteer-table-header">
             <tr>
-              <th style={volunteerHistoryStyles.th}>Event Name</th>
-              <th style={volunteerHistoryStyles.th}>Description</th>
-              <th style={volunteerHistoryStyles.th}>Location</th>
-              <th style={volunteerHistoryStyles.th}>Required Skills</th>
-              <th style={volunteerHistoryStyles.th}>Urgency</th>
-              <th style={volunteerHistoryStyles.th}>Status</th>
+              <th>Event Name</th>
+              <th>Description</th>
+              <th>Location</th>
+              <th>Required Skills</th>
+              <th>Urgency</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody>
             {events.length === 0 ? (
               <tr>
-                <td colSpan={6} style={volunteerHistoryStyles.emptyState}>
+                <td colSpan={6} className="volunteer-empty-state">
                   No volunteer history yet. Start volunteering to see your activities here!
                 </td>
               </tr>
             ) : (
               events.map((event, idx) => (
-                <tr 
-                  key={idx} 
-                  style={volunteerHistoryStyles.tr}
-                  onMouseEnter={(e) => e.target.parentElement.style.backgroundColor = "rgb(255, 249, 217)"}
-                  onMouseLeave={(e) => e.target.parentElement.style.backgroundColor = "white"}
-                >
-                  <td style={{...volunteerHistoryStyles.td, ...volunteerHistoryStyles.eventName}}>
+                <tr key={idx}>
+                  <td className="volunteer-event-name">
                     {event.name}
                   </td>
-                  <td style={{...volunteerHistoryStyles.td, ...volunteerHistoryStyles.description}}>
+                  <td className="volunteer-description">
                     {event.description}
                   </td>
-                  <td style={{...volunteerHistoryStyles.td, ...volunteerHistoryStyles.location}}>
+                  <td className="volunteer-location">
                     {event.location}
                   </td>
-                  <td style={volunteerHistoryStyles.td}>
-                    <div style={volunteerHistoryStyles.skillsContainer}>
+                  <td>
+                    <div className="volunteer-skills-container">
                       {(event.requiredSkills || []).map((skill) => (
-                        <span key={skill} style={volunteerHistoryStyles.skillBadge}>
+                        <span key={skill} className="volunteer-skill-badge">
                           {skill}
                         </span>
                       ))}
                     </div>
                   </td>
-                  <td style={volunteerHistoryStyles.td}>
-                    <span style={{...volunteerHistoryStyles.badge, ...getUrgencyStyle(event.urgency)}}>
+                  <td>
+                    <span className={`volunteer-badge ${getUrgencyClass(event.urgency)}`}>
                       {event.urgency}
                     </span>
                   </td>
-                  <td style={volunteerHistoryStyles.td}>
-                    <span style={{...volunteerHistoryStyles.badge, ...getStatusStyle(event.status)}}>
+                  <td>
+                    <span className={`volunteer-badge ${getStatusClass(event.status)}`}>
                       {event.status}
                     </span>
                   </td>
@@ -238,15 +135,7 @@ export default function VolunteerHistory({ events = MOCK_EVENTS }) {
         </table>
       </div>
 
-      <div style={{
-        marginTop: "2rem",
-        padding: "1rem",
-        backgroundColor: "rgb(255, 249, 217)", // cream
-        borderRadius: "8px",
-        border: `2px solid rgb(246, 190, 0)`, // gold
-        fontSize: "0.9rem",
-        color: "rgb(100, 8, 23)" // chocolate
-      }}>
+      <div className="volunteer-developer-note">
         💡 <strong>Developer Note:</strong> This component displays volunteer history data. 
         Connect it to your backend by passing the <code>events</code> prop with real data.
       </div>

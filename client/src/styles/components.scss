@@ -1,11 +1,14 @@
-@import "../styles/colors.scss";
+@use "../styles/colors.scss" as *;
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=League+Gothic&display=swap');
 
 html, body, #root {
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  overflow-y: auto;
 }
 
 // For the Top Red Banner
@@ -13,28 +16,50 @@ html, body, #root {
   position: fixed;
   top: 0;
   left: 0;
+  height: 30px;
   width: 100%;
   background-color: $primary-red;
   color: white;
   text-align: left;
-  padding: 20px 10px;
+  padding: 20px 20px;
+  font-size: 20px;
   font-weight: bold;
   z-index: 1000;
 }
 
+// For the white banner below the red one
 .banner_white {
   position: fixed;
-  top: 60px;
+  top: 70px;
   left: 0;
   width: 100%;
   background-color: white;
   color: $slate;
   text-align: left;
-  padding: 20px 10px;
   font-weight: bold;
   z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 20px;     
+  padding: 10px 20px;
+  height: 30px;
 }
 
+// White banner styling
+.banner_white > div,
+.banner_white .banner-link {
+  display: inline-block;
+  text-decoration: none;
+  color: inherit;
+}
+
+// Styling for Banner Links
+.banner-link {
+  font-family: "Source Sans 3", sans-serif;
+  font-weight: bold;
+}
+
+// styling and background image on front page
 .landing-page {
   background: 
     linear-gradient(to right, rgba(200, 16, 46, 0.7) 0%, 
@@ -42,15 +67,596 @@ html, body, #root {
     rgba(200, 16, 46, 0)) 35%,
     url("../assets/uh_hp_bg.jpg");
   background-size: cover;
+  background-attachment: fixed;
   min-height: 100vh;
   width: 100%;
   margin: 0;
   padding: 0;
 }
 
+// Text on front page
 .landing-content {
   text-align: right;
   padding: 50px;
   margin-top: 120px;
   -webkit-text-stroke: 1.5px $custom-gray;
+}
+
+// THE FOLLOWING ELEMENTS ARE USED ON THE LOGIN & USER REGISTRATION FORMS
+
+.form-page {
+  min-height: 100vh;
+  padding-top: 60px;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background: white;
+  box-sizing: border-box;
+}
+
+.form-card {
+  margin-top: 100px;
+  background: white;
+  padding: 40px 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  width: 350px;
+  text-align: center;
+  margin-bottom: 40px; 
+}
+
+.form-title {
+  font-family: 'League Gothic', sans-serif;
+  font-size: 36px;
+  margin-bottom: 30px;
+  color: black;
+  text-align: left;
+}
+
+.form-style {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .form-label {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: $slate;
+  }
+
+  .form-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid $custom-gray;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+}
+
+.form-input {
+  padding: 12px 15px;
+  border: 1px solid $cream;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.forgot-password {
+  text-align: right;
+  font-size: 14px;
+  color: $custom-gray;
+  cursor: pointer;
+}
+
+.form-button {
+  background: $primary-red; 
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 25px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.form-button:hover {
+  background: $brick;
+}
+
+.register-text {
+  margin-top: 20px;
+  font-size: 14px;
+  color: $slate;
+}
+
+.register-link {
+  color: $primary-red;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+// For password checking
+.password-requirements {
+  margin: 10px 0;
+  text-align: left;
+
+  .requirement-item {
+    display: flex;
+    align-items: flex-start; // aligns icon with first line of text
+    margin-bottom: 4px;
+  }
+
+  .requirement-icon {
+    width: 20px; // ensures consistent spacing
+    flex-shrink: 0; // keeps icon from shrinking
+  }
+
+  .requirement-text {
+    flex: 1;
+    line-height: 1.4;
+
+    &.valid {
+      color: $custom-green;
+    }
+
+    &.invalid {
+      color: $primary-red;
+    }
+  }
+}
+
+
+// END OF LOGIN & USER FORM STYLING
+
+// VOLUNTEER HISTORY STYLING
+.volunteer-history-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: Arial, sans-serif;
+}
+
+.volunteer-history-header {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: $primary-red;
+  margin-bottom: 2rem;
+  text-align: center;
+  border-bottom: 3px solid $gold;
+  padding-bottom: 1rem;
+}
+
+.volunteer-table-container {
+  background-color: $cream;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: auto;
+}
+
+.volunteer-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.volunteer-table-header {
+  background-color: $slate;
+  color: white;
+}
+
+.volunteer-table th {
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-bottom: 2px solid $primary-red;
+}
+
+.volunteer-table tr {
+  border-bottom: 1px solid $custom-gray;
+  
+  &:hover {
+    background-color: $cream;
+  }
+}
+
+.volunteer-table td {
+  padding: 1rem;
+  vertical-align: top;
+}
+
+.volunteer-event-name {
+  font-weight: 600;
+  color: $chocolate;
+  font-size: 1.1rem;
+}
+
+.volunteer-description {
+  max-width: 300px;
+  line-height: 1.4;
+  color: $slate;
+}
+
+.volunteer-location {
+  color: $brick;
+  font-weight: 500;
+}
+
+.volunteer-skills-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.volunteer-skill-badge {
+  background-color: $forest;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.volunteer-badge {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: center;
+  min-width: 100px;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.volunteer-urgency-high {
+  background-color: $primary-red;
+  color: white;
+}
+
+.volunteer-urgency-medium {
+  background-color: $gold;
+  color: $chocolate;
+}
+
+.volunteer-urgency-low {
+  background-color: $teal;
+  color: white;
+}
+
+.volunteer-urgency-default {
+  background-color: $custom-gray;
+  color: white;
+}
+
+.volunteer-status-started {
+  background-color: $brick;
+  color: white;
+}
+
+.volunteer-status-not-started {
+  background-color: $slate;
+  color: white;
+}
+
+.volunteer-status-done {
+  background-color: $custom-green;
+  color: white;
+}
+
+.volunteer-status-default {
+  background-color: $custom-gray;
+  color: white;
+}
+
+.volunteer-empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: $custom-gray;
+  font-size: 1.2rem;
+  font-style: italic;
+}
+
+.volunteer-developer-note {
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color: $cream;
+  border-radius: 8px;
+  border: 2px solid $gold;
+  font-size: 0.9rem;
+  color: $chocolate;
+}
+// END OF VOLUNTEER HISTORY STYLING
+
+// USER PROFILE MANAGEMENT PAGE STYLING
+
+.profile-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, $cream 0%, $gold 100%);
+  padding: 0;
+  width: 100vw;
+}
+
+.profile-card {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  box-shadow: 0 20px 40px rgba(200, 16, 46, 0.15);
+  border: none;
+  overflow: hidden;
+}
+
+.profile-header {
+  background: linear-gradient(135deg, $primary-red 0%, $brick 100%);
+  color: white;
+  padding: 30px;
+  text-align: center;
+  
+  h2 {
+    margin: 0;
+    font-size: 2.2rem;
+    font-weight: 300;
+    letter-spacing: 1px;
+  }
+  
+  p {
+    margin: 10px 0 0 0;
+    opacity: 0.9;
+    font-size: 1.1rem;
+  }
+}
+
+.profile-body {
+  padding: 60px;
+  background: white;
+  margin: 20px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid $gold;
+}
+
+.section-icon {
+  background: linear-gradient(135deg, $primary-red 0%, $brick 100%);
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+  font-size: 1.2rem;
+}
+
+.section-title {
+  color: $slate;
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.form-group-custom {
+  margin-bottom: 25px;
+}
+
+.form-label-custom {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: $slate;
+  font-size: 0.95rem;
+}
+
+.form-control-custom {
+  width: 100%;
+  padding: 15px 20px;
+  border: 2px solid $custom-gray;
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: $cream;
+  color: $slate;
+  
+  &:focus {
+    outline: none;
+    border-color: $primary-red;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(200, 16, 46, 0.1);
+  }
+  
+  &.error {
+    border-color: $brick;
+    background: #fdf2f2;
+  }
+}
+
+.skills-container-custom {
+  border: 2px solid $custom-gray;
+  border-radius: 12px;
+  padding: 25px;
+  background: $cream;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.skills-grid-custom {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
+}
+
+.skill-item-custom {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid $gold;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(200, 16, 46, 0.15);
+    border-color: $primary-red;
+  }
+}
+
+.skill-checkbox-custom {
+  margin-right: 10px;
+  width: 18px;
+  height: 18px;
+  accent-color: $primary-red;
+}
+
+.date-tags-custom {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.date-tag-custom {
+  background: linear-gradient(135deg, $teal 0%, $custom-green 100%);
+  color: white;
+  padding: 8px 15px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.remove-btn-custom {
+  background: rgba(255,255,255,0.3);
+  border: none;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s ease;
+  
+  &:hover {
+    background: rgba(255,255,255,0.5);
+  }
+}
+
+.btn-custom {
+  padding: 15px 30px;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.btn-primary-custom {
+  background: linear-gradient(135deg, $primary-red 0%, $brick 100%);
+  color: white;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(200, 16, 46, 0.3);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.btn-secondary-custom {
+  background: white;
+  color: $slate;
+  border: 2px solid $custom-gray;
+  
+  &:hover {
+    background: $cream;
+    border-color: $gold;
+    transform: translateY(-2px);
+  }
+}
+
+.error-message-custom {
+  color: $brick;
+  font-size: 0.85rem;
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.success-message {
+  background: linear-gradient(135deg, $custom-green 0%, $forest 100%);
+  color: white;
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.form-row-custom {
+  width: 50vw;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 60px;
+}
+
+.selected-dates-title {
+  color: $slate;
+  margin-bottom: 15px;
+  font-weight: 500;
+}
+
+.actions-border {
+  border-top: 2px solid $gold;
+  padding-top: 30px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+}
+
+@media (max-width: 768px) {
+  .form-row-custom {
+    grid-template-columns: 1fr;
+  }
+  .profile-container {
+    margin-top: 70px;
+    padding: 0;
+  }
+  .profile-body {
+    padding: 30px;
+  }
+  .profile-header h2 {
+    font-size: 1.8rem;
+  }
+}
+// END OF USER PROFILE MANAGEMENT PAGE STYLING
+
+
+//this is used for forms to give the red font color specifically for the *
+.required-asterisk {
+  color: $primary-red;
 }
