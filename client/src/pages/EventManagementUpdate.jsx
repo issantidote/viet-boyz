@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import "../styles/components.scss";
 import "../styles/colors.scss";
 
-const EventManagementNew = () => {
+const EventManagementUpdate = () => {
   //used when getting the specific event to edit
   const [eventName, setEventName] = useState(null);
   //set to true if there is an event to edit (successfully selected)
@@ -150,6 +150,8 @@ const EventManagementNew = () => {
     eventDate: new Date(2025, 10, 4, 12, 15)
     });
   };
+
+
 
   return (
     <>
@@ -406,4 +408,4 @@ const EventManagementNew = () => {
   );
 };
 
-export default EventManagementNew;
+export default EventManagementUpdate;
