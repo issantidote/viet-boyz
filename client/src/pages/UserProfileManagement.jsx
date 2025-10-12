@@ -14,14 +14,18 @@ import {
 
 const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 
+const US_STATES = [
+  'AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY'
+];
+
 const emptyForm = {
   name: '',
   email: '',
-  location: { city: '', state: '', country: '' },
+  location: { city: '', state: '' },
   skillsCsv: '',       // UI-only, mapped to skills[]
-  rolesCsv: '',        // UI-only, mapped to preferences.roles[]
-  preferences: { remoteOk: true, notes: '' },
-  availability: { timezone: 'America/Chicago', days: [], windows: [{ start: '09:00', end: '17:00' }] }
+  // rolesCsv removed
+  preferences: { notes: '' },
+  availability: { days: [], windows: [{ start: '09:00', end: '17:00' }] }
 };
 
 export default function UserProfileManagement() {
@@ -86,12 +90,11 @@ export default function UserProfileManagement() {
 
     if (name === 'name' || name === 'email') return setForm(f => ({ ...f, [name]: value }));
     if (name === 'skillsCsv') return setForm(f => ({ ...f, skillsCsv: value }));
-    if (name === 'rolesCsv') return setForm(f => ({ ...f, rolesCsv: value }));
-    if (name === 'notes') return setForm(f => ({ ...f, preferences: { ...f.preferences, notes: value }}));
-    if (name === 'remoteOk') return setForm(f => ({ ...f, preferences: { ...f.preferences, remoteOk: checked }}));
-    if (name === 'timezone') return setForm(f => ({ ...f, availability: { ...f.availability, timezone: value }}));
+  // rolesCsv removed
+  if (name === 'notes') return setForm(f => ({ ...f, preferences: { ...f.preferences, notes: value }}));
+  if (name === 'timezone') return; // timezone removed
 
-    if (name === 'city' || name === 'state' || name === 'country') {
+    if (name === 'city' || name === 'state') {
       return setForm(f => ({ ...f, location: { ...f.location, [name]: value }}));
     }
   }
@@ -112,17 +115,13 @@ export default function UserProfileManagement() {
       email: form.email.trim(),
       location: {
         city: form.location.city.trim(),
-        state: form.location.state.trim() || undefined,
-        country: form.location.country.trim()
+        state: form.location.state.trim() || undefined
       },
       skills: dedupe(csvToArray(form.skillsCsv)),
-      preferences: {
-        roles: dedupe(csvToArray(form.rolesCsv)),
-        remoteOk: !!form.preferences.remoteOk,
+        preferences: {
         notes: form.preferences.notes?.trim() || undefined
       },
       availability: {
-        timezone: form.availability.timezone || 'America/Chicago',
         days: dedupe(form.availability.days),
         windows: form.availability.windows.map(w => ({ start: w.start, end: w.end }))
       }
@@ -157,14 +156,12 @@ export default function UserProfileManagement() {
         email: p.email || '',
         location: {
           city: p.location?.city || '',
-          state: p.location?.state || '',
-          country: p.location?.country || ''
+          state: p.location?.state || ''
         },
         skillsCsv: (p.skills || []).join(', '),
-        rolesCsv: (p.preferences?.roles || []).join(', '),
-        preferences: { remoteOk: !!p.preferences?.remoteOk, notes: p.preferences?.notes || '' },
+  // rolesCsv removed
+  preferences: { notes: p.preferences?.notes || '' },
         availability: {
-          timezone: p.availability?.timezone || 'America/Chicago',
           days: p.availability?.days || [],
           windows: (p.availability?.windows && p.availability.windows.length > 0)
             ? p.availability.windows
@@ -271,30 +268,13 @@ export default function UserProfileManagement() {
 
               <div className="form-group-custom">
                 <label className="form-label-custom">State</label>
-                <input
-                  type="text"
-                  name="state"
-                  value={form.location.state}
-                  onChange={onChange}
-                  maxLength={100}
-                  className="form-control-custom"
-                  placeholder="TX"
-                />
+                <select name="state" value={form.location.state} onChange={onChange} className="form-control-custom">
+                  <option value="">Select state</option>
+                  {US_STATES.map(s => <option key={s} value={s}>{s}</option>)}
+                </select>
               </div>
 
-              <div className="form-group-custom">
-                <label className="form-label-custom">Country <span style={{color: 'rgb(150, 12, 34)'}}>*</span></label>
-                <input
-                  type="text"
-                  name="country"
-                  value={form.location.country}
-                  onChange={onChange}
-                  maxLength={100}
-                  className="form-control-custom"
-                  placeholder="USA"
-                  required
-                />
-              </div>
+              {/* country removed (US-only) */}
             </div>
           </div>
 
@@ -315,36 +295,15 @@ export default function UserProfileManagement() {
                 value={form.skillsCsv}
                 onChange={onChange}
                 className="form-control-custom"
-                placeholder="React, Node.js, SQL"
+                placeholder="React, Node.js, SQL, etc."
               />
               <small className="helper-text">Comma-separated list. Saved as an array.</small>
             </div>
 
             <div className="form-row-custom">
-              <div className="form-group-custom">
-                <label className="form-label-custom">Preferred Roles</label>
-                <input
-                  type="text"
-                  name="rolesCsv"
-                  value={form.rolesCsv}
-                  onChange={onChange}
-                  className="form-control-custom"
-                  placeholder="Coordinator, Organizer"
-                />
-              </div>
+              {/* preferred roles removed */}
 
-              <div className="form-group-custom" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <input
-                  id="remoteOk"
-                  type="checkbox"
-                  name="remoteOk"
-                  checked={form.preferences.remoteOk}
-                  onChange={onChange}
-                  className="skill-checkbox-custom"
-                  style={{ marginTop: 8 }}
-                />
-                <label className="form-label-custom" htmlFor="remoteOk" style={{ margin: 0 }}>Remote OK</label>
-              </div>
+              {/* remote option removed */}
             </div>
 
             <div className="form-group-custom">
@@ -371,18 +330,6 @@ export default function UserProfileManagement() {
             </div>
 
             <div className="form-row-custom">
-              <div className="form-group-custom">
-                <label className="form-label-custom">Timezone</label>
-                <input
-                  type="text"
-                  name="timezone"
-                  value={form.availability.timezone}
-                  onChange={onChange}
-                  className="form-control-custom"
-                  placeholder="America/Chicago"
-                />
-              </div>
-
               <div className="form-group-custom" style={{ gridColumn: 'span 2' }}>
                 <label className="form-label-custom">Available Days</label>
                 <div className="date-tags-custom" style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
@@ -460,13 +407,13 @@ export default function UserProfileManagement() {
           <div className="form-row-custom" style={{ gap: 50 }}>
             <input
               className="form-control-custom"
-              placeholder="Filter by city (client-side)"
+              placeholder="Filter by city"
               value={filters.city}
               onChange={e => setFilters(f => ({ ...f, city: e.target.value }))}
             />
             <input
               className="form-control-custom"
-              placeholder="Filter by skill (client-side)"
+              placeholder="Filter by skill"
               value={filters.skill}
               onChange={e => setFilters(f => ({ ...f, skill: e.target.value }))}
             />
@@ -475,7 +422,7 @@ export default function UserProfileManagement() {
               value={filters.availableOn}
               onChange={e => setFilters(f => ({ ...f, availableOn: e.target.value }))}
             >
-              <option value="">Available day (server-side)</option>
+              <option value="">Available day</option>
               {DAYS.map(d => <option key={d} value={d}>{d}</option>)}
             </select>
             <button className="btn-custom btn-secondary-custom" onClick={refresh} type="button" style={{ marginBottom: 20 }}>Refresh</button>
@@ -497,7 +444,6 @@ export default function UserProfileManagement() {
                   <th>Location</th>
                   <th>Skills</th>
                   <th>Days</th>
-                  <th>Remote</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -506,10 +452,9 @@ export default function UserProfileManagement() {
                   <tr key={p.id}>
                     <td>{p.name}</td>
                     <td>{p.email}</td>
-                    <td>{p.location.city}{p.location.state ? `, ${p.location.state}` : ''}, {p.location.country}</td>
+                    <td>{p.location.city}{p.location.state ? `, ${p.location.state}` : ''}</td>
                     <td>{(p.skills || []).join(', ')}</td>
                     <td>{(p.availability?.days || []).join(' ')}</td>
-                    <td>{p.preferences?.remoteOk ? 'Yes' : 'No'}</td>
                     <td style={{ display: 'flex', gap: 6 }}>
                       <button className="btn-custom btn-secondary-custom" onClick={() => onEdit(p.id)} type="button">Edit</button>
                       <button className="btn-custom btn-danger-custom" onClick={() => onDelete(p.id)} type="button">Delete</button>
@@ -517,7 +462,7 @@ export default function UserProfileManagement() {
                   </tr>
                 ))}
                 {!loading && filteredByClient.length === 0 && (
-                  <tr><td colSpan="7" style={{ padding: 12, color: '#888' }}>No profiles match.</td></tr>
+                  <tr><td colSpan="6" style={{ padding: 12, color: '#888' }}>No profiles match.</td></tr>
                 )}
               </tbody>
             </table>

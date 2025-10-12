@@ -3,9 +3,8 @@ import store from '../store/memoryStore.js';
 import { memoizeByKey } from '../utils/cache.js';
 import { persistToFile } from '../utils/persist.js';
 
-function matches(p, { city, country, skill, availableOn, q }) {
+function matches(p, { city, skill, availableOn, q }) {
   if (city && p.location.city.toLowerCase() !== city.toLowerCase()) return false;
-  if (country && p.location.country.toLowerCase() !== country.toLowerCase()) return false;
   if (skill && !p.skills.map(s=>s.toLowerCase()).includes(skill.toLowerCase())) return false;
   if (availableOn && !p.availability.days.includes(availableOn)) return false;
   if (q) {
@@ -26,7 +25,7 @@ const cachedList = memoizeByKey(async (key) => {
 
 export async function list(query) {
   const key = JSON.stringify({
-    city: query.city, country: query.country, skill: query.skill,
+    city: query.city, skill: query.skill,
     availableOn: query.availableOn, q: query.q,
     limit: query.limit, offset: query.offset
   });

@@ -11,6 +11,18 @@ app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 app.use(morgan('dev'));
 
+// Disable ETag generation so Express won't return 304 based on ETag
+app.disable('etag');
+
+// Prevent caching for API responses (avoids browser sending If-None-Match / If-Modified-Since)
+app.use('/api', (req, res, next) => {
+  // only affect API responses
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  next();
+});
+
 // 🧩 ADD THIS middleware BEFORE routes
 // It removes empty-string query values so Zod validation doesn't fail
 app.use((req, _res, next) => {

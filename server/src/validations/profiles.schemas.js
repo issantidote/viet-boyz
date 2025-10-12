@@ -9,16 +9,15 @@ const emptyToUndef = (v) =>
 
 export const Availability = z.object({
   days: z.array(z.enum(['Mon','Tue','Wed','Thu','Fri','Sat','Sun'])).default([]),
-  timezone: z.string().default('UTC'),
   windows: z.array(z.object({ start: z.string(), end: z.string() })).default([])
 });
 
 export const BaseProfile = z.object({
   name: z.string().min(1),
   email: z.string().email(),
-  location: z.object({ city: z.string().min(1), state: z.string().optional(), country: z.string().min(1) }),
+  location: z.object({ city: z.string().min(1), state: z.string().optional() }),
   skills: z.array(z.string()).default([]),
-  preferences: z.object({ roles: z.array(z.string()).default([]), remoteOk: z.boolean().default(true), notes: z.string().optional() }).default({}),
+  preferences: z.object({ notes: z.string().optional() }).default({}),
   availability: Availability
 });
 
@@ -27,7 +26,6 @@ export const updateProfileSchema = BaseProfile.partial();
 
 export const listQuerySchema = z.object({
   city: z.preprocess(emptyToUndef, z.string().optional()),
-  country: z.preprocess(emptyToUndef, z.string().optional()),
   skill: z.preprocess(emptyToUndef, z.string().optional()),
   q: z.preprocess(emptyToUndef, z.string().optional()),
   availableOn: z.preprocess(
