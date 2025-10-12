@@ -1,0 +1,187 @@
+[
+  {
+    "id": "0326dac2-c601-45b3-8396-5f7c58a0504e",
+    "createdAt": "2025-10-12T17:38:02.385Z",
+    "updatedAt": "2025-10-12T17:38:02.385Z",
+    "name": "Diego Ramirez",
+    "email": "diego@ex.com",
+    "location": {
+      "city": "Austin",
+      "state": "TX",
+      "country": "USA"
+    },
+    "skills": [
+      "Node.js",
+      "Express",
+      "Docker"
+    ],
+    "preferences": {
+      "roles": [
+        "Backend Dev"
+      ],
+      "remoteOk": false
+    },
+    "availability": {
+      "days": [
+        "Tue",
+        "Thu",
+        "Sat"
+      ],
+      "timezone": "America/Chicago",
+      "windows": [
+        {
+          "start": "18:00",
+          "end": "22:00"
+        }
+      ]
+    }
+  },
+  {
+    "id": "ab90f4a3-9cda-4335-aead-ff662c6605e1",
+    "createdAt": "2025-10-12T17:38:24.129Z",
+    "updatedAt": "2025-10-12T17:38:24.129Z",
+    "name": "Linh Tran",
+    "email": "linh@ex.com",
+    "location": {
+      "city": "Da Nang",
+      "country": "Vietnam"
+    },
+    "skills": [
+      "Python",
+      "Pandas",
+      "SQL"
+    ],
+    "preferences": {
+      "roles": [
+        "Data Analyst"
+      ],
+      "remoteOk": true,
+      "notes": "Comfortable with Excel dashboards"
+    },
+    "availability": {
+      "days": [
+        "Mon",
+        "Tue",
+        "Fri"
+      ],
+      "timezone": "Asia/Ho_Chi_Minh",
+      "windows": [
+        {
+          "start": "08:30",
+          "end": "12:00"
+        }
+      ]
+    }
+  },
+  {
+    "id": "ff4c5c74-f5da-4747-b525-304e608f3551",
+    "createdAt": "2025-10-12T17:50:18.457Z",
+    "updatedAt": "2025-10-12T17:50:18.457Z",
+    "name": "Priya Shah",
+    "email": "priya@ex.com",
+    "location": {
+      "city": "San Jose",
+      "state": "CA",
+      "country": "USA"
+    },
+    "skills": [
+      "React",
+      "TypeScript",
+      "REST"
+    ],
+    "preferences": {
+      "roles": [
+        "Full-Stack"
+      ],
+      "remoteOk": true
+    },
+    "availability": {
+      "days": [
+        "Sat",
+        "Sun"
+      ],
+      "timezone": "America/Los_Angeles",
+      "windows": [
+        {
+          "start": "10:00",
+          "end": "16:00"
+        }
+      ]
+    }
+  },
+  {
+    "id": "96e22cca-99db-45e2-a293-b21bdb01d41d",
+    "createdAt": "2025-10-12T17:50:36.109Z",
+    "updatedAt": "2025-10-12T17:50:36.109Z",
+    "name": "Omar El-Sayed",
+    "email": "omar@ex.com",
+    "location": {
+      "city": "Toronto",
+      "country": "Canada"
+    },
+    "skills": [
+      "AWS",
+      "CI/CD",
+      "Terraform"
+    ],
+    "preferences": {
+      "roles": [
+        "DevOps"
+      ],
+      "remoteOk": true
+    },
+    "availability": {
+      "days": [
+        "Mon",
+        "Thu"
+      ],
+      "timezone": "America/Toronto",
+      "windows": [
+        {
+          "start": "09:00",
+          "end": "13:00"
+        },
+        {
+          "start": "14:00",
+          "end": "17:00"
+        }
+      ]
+    }
+  },
+  {
+    "id": "8bc192e1-3d73-4854-be86-8297a32ee265",
+    "createdAt": "2025-10-12T17:50:43.088Z",
+    "updatedAt": "2025-10-12T17:50:43.088Z",
+    "name": "Sofia Rossi",
+    "email": "sofia@ex.com",
+    "location": {
+      "city": "Milan",
+      "country": "Italy"
+    },
+    "skills": [
+      "Figma",
+      "UX Research",
+      "Prototyping"
+    ],
+    "preferences": {
+      "roles": [
+        "Designer"
+      ],
+      "remoteOk": true,
+      "notes": "Bilingual EN/IT"
+    },
+    "availability": {
+      "days": [
+        "Wed",
+        "Thu"
+      ],
+      "timezone": "Europe/Rome",
+      "windows": [
+        {
+          "start": "13:00",
+          "end": "18:00"
+        }
+      ]
+    }
+  }
+]

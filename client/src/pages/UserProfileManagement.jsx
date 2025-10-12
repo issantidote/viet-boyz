@@ -1,477 +1,355 @@
-import React, { useState } from 'react';
-import '../styles/components.scss';
+import { useEffect, useMemo, useState } from 'react';
+import {
+  listProfiles,
+  createProfile,
+  updateProfile,
+  deleteProfile,
+  getProfile
+} from '../services/profilesApi';
 
-const UserProfileManagement = () => {
-  const [formData, setFormData] = useState({
-    fullName: '',
-    address1: '',
-    address2: '',
-    city: '',
-    state: '',
-    zipcode: '',
-    skills: [],
-    preferences: '',
-    availability: []
-  });
+const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 
-  const [errors, setErrors] = useState({});
+const emptyForm = {
+  name: '',
+  email: '',
+  location: { city: '', state: '', country: '' },
+  skillsCsv: '',       // UI-only, mapped to skills[]
+  rolesCsv: '',        // UI-only, mapped to preferences.roles[]
+  preferences: { remoteOk: true, notes: '' },
+  availability: { timezone: 'America/Chicago', days: [], windows: [{ start: '09:00', end: '17:00' }] }
+};
 
-  // US States for dropdown
-  const states = [
-    { code: '', name: 'Select State' },
-    { code: 'AL', name: 'Alabama' },
-    { code: 'AK', name: 'Alaska' },
-    { code: 'AZ', name: 'Arizona' },
-    { code: 'AR', name: 'Arkansas' },
-    { code: 'CA', name: 'California' },
-    { code: 'CO', name: 'Colorado' },
-    { code: 'CT', name: 'Connecticut' },
-    { code: 'DE', name: 'Delaware' },
-    { code: 'FL', name: 'Florida' },
-    { code: 'GA', name: 'Georgia' },
-    { code: 'HI', name: 'Hawaii' },
-    { code: 'ID', name: 'Idaho' },
-    { code: 'IL', name: 'Illinois' },
-    { code: 'IN', name: 'Indiana' },
-    { code: 'IA', name: 'Iowa' },
-    { code: 'KS', name: 'Kansas' },
-    { code: 'KY', name: 'Kentucky' },
-    { code: 'LA', name: 'Louisiana' },
-    { code: 'ME', name: 'Maine' },
-    { code: 'MD', name: 'Maryland' },
-    { code: 'MA', name: 'Massachusetts' },
-    { code: 'MI', name: 'Michigan' },
-    { code: 'MN', name: 'Minnesota' },
-    { code: 'MS', name: 'Mississippi' },
-    { code: 'MO', name: 'Missouri' },
-    { code: 'MT', name: 'Montana' },
-    { code: 'NE', name: 'Nebraska' },
-    { code: 'NV', name: 'Nevada' },
-    { code: 'NH', name: 'New Hampshire' },
-    { code: 'NJ', name: 'New Jersey' },
-    { code: 'NM', name: 'New Mexico' },
-    { code: 'NY', name: 'New York' },
-    { code: 'NC', name: 'North Carolina' },
-    { code: 'ND', name: 'North Dakota' },
-    { code: 'OH', name: 'Ohio' },
-    { code: 'OK', name: 'Oklahoma' },
-    { code: 'OR', name: 'Oregon' },
-    { code: 'PA', name: 'Pennsylvania' },
-    { code: 'RI', name: 'Rhode Island' },
-    { code: 'SC', name: 'South Carolina' },
-    { code: 'SD', name: 'South Dakota' },
-    { code: 'TN', name: 'Tennessee' },
-    { code: 'TX', name: 'Texas' },
-    { code: 'UT', name: 'Utah' },
-    { code: 'VT', name: 'Vermont' },
-    { code: 'VA', name: 'Virginia' },
-    { code: 'WA', name: 'Washington' },
-    { code: 'WV', name: 'West Virginia' },
-    { code: 'WI', name: 'Wisconsin' },
-    { code: 'WY', name: 'Wyoming' }
-  ];
+export default function UserProfileManagement() {
+  // data
+  const [items, setItems] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  // Sample skills - in real app, these would come from API
-  const availableSkills = [
-    { id: 1, name: 'Event Planning' },
-    { id: 2, name: 'Food Service' },
-    { id: 3, name: 'Teaching/Tutoring' },
-    { id: 4, name: 'Healthcare Support' },
-    { id: 5, name: 'Construction/Repair' },
-    { id: 6, name: 'Administrative' },
-    { id: 7, name: 'Transportation' },
-    { id: 8, name: 'Fundraising' },
-    { id: 9, name: 'Technology Support' },
-    { id: 10, name: 'Animal Care' },
-    { id: 11, name: 'Environmental Cleanup' },
-    { id: 12, name: 'Customer Service' }
-  ];
+  // form/edit state
+  const [form, setForm] = useState(emptyForm);
+  const [editingId, setEditingId] = useState(null);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-    // Clear error when user starts typing
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
+  // filters
+  const [filters, setFilters] = useState({ city: '', skill: '', availableOn: '' });
+
+  // load list
+  async function refresh() {
+    try {
+      setLoading(true);
+      setError('');
+      const { items, total } = await listProfiles({
+        city: filters.city || undefined,
+        skill: filters.skill || undefined,
+        availableOn: filters.availableOn || undefined,
+        limit: 200
+      });
+      setItems(items);
+      setTotal(total);
+    } catch (e) {
+      setError(msg(e));
+    } finally {
+      setLoading(false);
     }
-  };
+  }
 
-  const handleSkillToggle = (skillId) => {
-    setFormData(prev => ({
-      ...prev,
-      skills: prev.skills.includes(skillId)
-        ? prev.skills.filter(id => id !== skillId)
-        : [...prev.skills, skillId]
-    }));
-    if (errors.skills) {
-      setErrors(prev => ({ ...prev, skills: '' }));
-    }
-  };
+  useEffect(() => { refresh(); /* eslint-disable-next-line */ }, []);
+  useEffect(() => { refresh(); /* re-query when filters change */ }, [filters.availableOn]);
 
-  const handleDateChange = (e) => {
-    const selectedDate = e.target.value;
-    if (selectedDate && !formData.availability.includes(selectedDate)) {
-      setFormData(prev => ({
-        ...prev,
-        availability: [...prev.availability, selectedDate]
-      }));
-      if (errors.availability) {
-        setErrors(prev => ({ ...prev, availability: '' }));
-      }
-    }
-  };
-
-  const removeDateFromAvailability = (dateToRemove) => {
-    setFormData(prev => ({
-      ...prev,
-      availability: prev.availability.filter(date => date !== dateToRemove)
-    }));
-  };
-
-  const validateForm = () => {
-    const newErrors = {};
-
-    if (!formData.fullName.trim()) newErrors.fullName = 'Full name is required';
-    else if (formData.fullName.length > 50) newErrors.fullName = 'Full name must be 50 characters or less';
-
-    if (!formData.address1.trim()) newErrors.address1 = 'Address is required';
-    else if (formData.address1.length > 100) newErrors.address1 = 'Address must be 100 characters or less';
-
-    if (formData.address2.length > 100) newErrors.address2 = 'Address 2 must be 100 characters or less';
-
-    if (!formData.city.trim()) newErrors.city = 'City is required';
-    else if (formData.city.length > 100) newErrors.city = 'City must be 100 characters or less';
-
-    if (!formData.state) newErrors.state = 'State is required';
-
-    if (!formData.zipcode.trim()) newErrors.zipcode = 'Zip code is required';
-    else if (!/^\d{5}(-\d{4})?$/.test(formData.zipcode)) newErrors.zipcode = 'Enter valid zip code (12345 or 12345-6789)';
-
-    if (formData.skills.length === 0) newErrors.skills = 'At least one skill is required';
-
-    if (formData.availability.length === 0) newErrors.availability = 'At least one availability date is required';
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = () => {
-    if (validateForm()) {
-      console.log('Form submitted:', formData);
-      alert('Profile saved successfully!');
-    }
-  };
-
-  const handleCancel = () => {
-    setFormData({
-      fullName: '',
-      address1: '',
-      address2: '',
-      city: '',
-      state: '',
-      zipcode: '',
-      skills: [],
-      preferences: '',
-      availability: []
+  const filteredByClient = useMemo(() => {
+    // Client-side filter for city/skill when you don't want to refetch each keystroke
+    const skill = filters.skill.trim().toLowerCase();
+    const city = filters.city.trim().toLowerCase();
+    return items.filter(p => {
+      const okCity = city ? p.location.city.toLowerCase().includes(city) : true;
+      const okSkill = skill ? p.skills.some(s => s.toLowerCase().includes(skill)) : true;
+      return okCity && okSkill;
     });
-    setErrors({});
-  };
+  }, [items, filters.city, filters.skill]);
+
+  // helpers
+  function msg(e) {
+    try {
+      const s = typeof e === 'string' ? e : e.message || 'Error';
+      return s.length > 400 ? s.slice(0, 400) + '…' : s;
+    } catch { return 'Error'; }
+  }
+  const csvToArray = (csv) => csv.split(',').map(s => s.trim()).filter(Boolean);
+  const dedupe = (arr) => Array.from(new Set(arr));
+
+  function onChange(e) {
+    const { name, value, type, checked } = e.target;
+
+    // top-level switches
+    if (name === 'name' || name === 'email') return setForm(f => ({ ...f, [name]: value }));
+    if (name === 'skillsCsv') return setForm(f => ({ ...f, skillsCsv: value }));
+    if (name === 'rolesCsv') return setForm(f => ({ ...f, rolesCsv: value }));
+    if (name === 'notes') return setForm(f => ({ ...f, preferences: { ...f.preferences, notes: value }}));
+    if (name === 'remoteOk') return setForm(f => ({ ...f, preferences: { ...f.preferences, remoteOk: checked }}));
+    if (name === 'timezone') return setForm(f => ({ ...f, availability: { ...f.availability, timezone: value }}));
+
+    // nested location
+    if (name === 'city' || name === 'state' || name === 'country') {
+      return setForm(f => ({ ...f, location: { ...f.location, [name]: value }}));
+    }
+  }
+
+  function toggleDay(day) {
+    setForm(f => {
+      const has = f.availability.days.includes(day);
+      const days = has ? f.availability.days.filter(d => d !== day) : [...f.availability.days, day];
+      return { ...f, availability: { ...f.availability, days } };
+    });
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setError('');
+    const payload = {
+      name: form.name.trim(),
+      email: form.email.trim(),
+      location: {
+        city: form.location.city.trim(),
+        state: form.location.state.trim() || undefined,
+        country: form.location.country.trim()
+      },
+      skills: dedupe(csvToArray(form.skillsCsv)),
+      preferences: {
+        roles: dedupe(csvToArray(form.rolesCsv)),
+        remoteOk: !!form.preferences.remoteOk,
+        notes: form.preferences.notes?.trim() || undefined
+      },
+      availability: {
+        timezone: form.availability.timezone || 'America/Chicago',
+        days: dedupe(form.availability.days),
+        windows: form.availability.windows.map(w => ({ start: w.start, end: w.end }))
+      }
+    };
+
+    try {
+      if (!editingId) {
+        const created = await createProfile(payload);
+        setItems(prev => [created, ...prev]);
+      } else {
+        const updated = await updateProfile(editingId, payload);
+        setItems(prev => prev.map(p => (p.id === editingId ? updated : p)));
+      }
+      resetForm();
+    } catch (e2) {
+      setError(msg(e2));
+    }
+  }
+
+  function resetForm() {
+    setEditingId(null);
+    setForm(emptyForm);
+  }
+
+  async function onEdit(id) {
+    try {
+      setError('');
+      const p = await getProfile(id);
+      setEditingId(id);
+      setForm({
+        name: p.name || '',
+        email: p.email || '',
+        location: {
+          city: p.location?.city || '',
+          state: p.location?.state || '',
+          country: p.location?.country || ''
+        },
+        skillsCsv: (p.skills || []).join(', '),
+        rolesCsv: (p.preferences?.roles || []).join(', '),
+        preferences: { remoteOk: !!p.preferences?.remoteOk, notes: p.preferences?.notes || '' },
+        availability: {
+          timezone: p.availability?.timezone || 'America/Chicago',
+          days: p.availability?.days || [],
+          windows: (p.availability?.windows && p.availability.windows.length > 0)
+            ? p.availability.windows
+            : [{ start: '09:00', end: '17:00' }]
+        }
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (e) {
+      setError(msg(e));
+    }
+  }
+
+  async function onDelete(id) {
+    if (!confirm('Delete this profile?')) return;
+    try {
+      await deleteProfile(id);
+      setItems(prev => prev.filter(p => p.id !== id));
+    } catch (e) {
+      setError(msg(e));
+    }
+  }
 
   return (
-    <>
-      <div className="profile-container">
-        <div className="card profile-card">
-          {/* Header */}
-          <div className="profile-header">
-            <h2>Profile Management</h2>
-            <p>Complete your profile to participate in volunteer events</p>
+    <div style={{ maxWidth: 1000, margin: '0 auto', padding: 16 }}>
+      <h2>User Profile Management</h2>
+
+      {/* Filters */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr auto', gap: 8, marginBottom: 16 }}>
+        <input
+          placeholder="Filter by city (client-side)"
+          value={filters.city}
+          onChange={e => setFilters(f => ({ ...f, city: e.target.value }))}
+        />
+        <input
+          placeholder="Filter by skill (client-side)"
+          value={filters.skill}
+          onChange={e => setFilters(f => ({ ...f, skill: e.target.value }))}
+        />
+        <select value={filters.availableOn} onChange={e => setFilters(f => ({ ...f, availableOn: e.target.value }))}>
+          <option value="">Available day (server-side)</option>
+          {DAYS.map(d => <option key={d} value={d}>{d}</option>)}
+        </select>
+        <button onClick={refresh}>Refresh</button>
+      </div>
+
+      {error && <div style={{ background: '#fee', border: '1px solid #f99', padding: 8, marginBottom: 12 }}>{error}</div>}
+
+      {/* Form */}
+      <form onSubmit={handleSubmit} style={{ border: '1px solid #ddd', borderRadius: 8, padding: 16, marginBottom: 20 }}>
+        <h3>{editingId ? 'Edit Profile' : 'Create Profile'}</h3>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+          <label>
+            <div>Name</div>
+            <input name="name" value={form.name} onChange={onChange} required />
+          </label>
+
+          <label>
+            <div>Email</div>
+            <input name="email" type="email" value={form.email} onChange={onChange} required />
+          </label>
+
+          <label>
+            <div>City</div>
+            <input name="city" value={form.location.city} onChange={onChange} required />
+          </label>
+
+          <label>
+            <div>State</div>
+            <input name="state" value={form.location.state} onChange={onChange} />
+          </label>
+
+          <label>
+            <div>Country</div>
+            <input name="country" value={form.location.country} onChange={onChange} required />
+          </label>
+
+          <label>
+            <div>Skills (comma-separated)</div>
+            <input name="skillsCsv" value={form.skillsCsv} onChange={onChange} placeholder="React, Node.js, SQL" />
+          </label>
+
+          <label>
+            <div>Preferred Roles (comma-separated)</div>
+            <input name="rolesCsv" value={form.rolesCsv} onChange={onChange} placeholder="Coordinator, Organizer" />
+          </label>
+
+          <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <input type="checkbox" name="remoteOk" checked={form.preferences.remoteOk} onChange={onChange} />
+            Remote OK
+          </label>
+
+          <label style={{ gridColumn: '1 / -1' }}>
+            <div>Notes</div>
+            <textarea name="notes" value={form.preferences.notes} onChange={onChange} rows={3} />
+          </label>
+
+          <label>
+            <div>Timezone</div>
+            <input name="timezone" value={form.availability.timezone} onChange={onChange} />
+          </label>
+
+          <div>
+            <div>Available Days</div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 6 }}>
+              {DAYS.map(d => (
+                <label key={d} style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <input
+                    type="checkbox"
+                    checked={form.availability.days.includes(d)}
+                    onChange={() => toggleDay(d)}
+                  />
+                  {d}
+                </label>
+              ))}
+            </div>
           </div>
 
-          {/* Form Body */}
-          <div className="profile-body">
-            {/* Personal Information Section */}
-            <div className="mb-5">
-              <div className="section-header">
-                <div className="section-icon">
-                  <i className="bi bi-person"></i>
-                </div>
-                <h3 className="section-title">Personal Information</h3>
-              </div>
-              
-              <div className="form-group-custom">
-                <label className="form-label-custom">
-                  Full Name <span style={{color: 'rgb(150, 12, 34)'}}>*</span>
-                </label>
-                <input
-                  type="text"
-                  name="fullName"
-                  value={formData.fullName}
-                  onChange={handleInputChange}
-                  maxLength={50}
-                  className={`form-control-custom ${errors.fullName ? 'error' : ''}`}
-                  placeholder="Enter your full name"
-                />
-                {errors.fullName && (
-                  <div className="error-message-custom">
-                    <i className="bi bi-exclamation-circle"></i>
-                    {errors.fullName}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Address Section */}
-            <div className="mb-5">
-              <div className="section-header">
-                <div className="section-icon">
-                  <i className="bi bi-geo-alt"></i>
-                </div>
-                <h3 className="section-title">Address Information</h3>
-              </div>
-              
-              <div className="form-group-custom">
-                <label className="form-label-custom">
-                  Address 1 <span style={{color: 'rgb(150, 12, 34)'}}>*</span>
-                </label>
-                <input
-                  type="text"
-                  name="address1"
-                  value={formData.address1}
-                  onChange={handleInputChange}
-                  maxLength={100}
-                  className={`form-control-custom ${errors.address1 ? 'error' : ''}`}
-                  placeholder="Enter your street address"
-                />
-                {errors.address1 && (
-                  <div className="error-message-custom">
-                    <i className="bi bi-exclamation-circle"></i>
-                    {errors.address1}
-                  </div>
-                )}
-              </div>
-
-              <div className="form-group-custom">
-                <label className="form-label-custom">Address 2 (Optional)</label>
-                <input
-                  type="text"
-                  name="address2"
-                  value={formData.address2}
-                  onChange={handleInputChange}
-                  maxLength={100}
-                  className={`form-control-custom ${errors.address2 ? 'error' : ''}`}
-                  placeholder="Apartment, suite, etc."
-                />
-                {errors.address2 && (
-                  <div className="error-message-custom">
-                    <i className="bi bi-exclamation-circle"></i>
-                    {errors.address2}
-                  </div>
-                )}
-              </div>
-
-              <div className="form-row-custom">
-                <div className="form-group-custom">
-                  <label className="form-label-custom">
-                    City <span style={{color: 'rgb(150, 12, 34)'}}>*</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="city"
-                    value={formData.city}
-                    onChange={handleInputChange}
-                    maxLength={100}
-                    className={`form-control-custom ${errors.city ? 'error' : ''}`}
-                    placeholder="Enter city"
-                  />
-                  {errors.city && (
-                    <div className="error-message-custom">
-                      <i className="bi bi-exclamation-circle"></i>
-                      {errors.city}
-                    </div>
-                  )}
-                </div>
-
-                <div className="form-group-custom">
-                  <label className="form-label-custom">
-                    State <span style={{color: 'rgb(150, 12, 34)'}}>*</span>
-                  </label>
-                  <select
-                    name="state"
-                    value={formData.state}
-                    onChange={handleInputChange}
-                    className={`form-control-custom ${errors.state ? 'error' : ''}`}
-                  >
-                    {states.map(state => (
-                      <option key={state.code} value={state.code}>
-                        {state.name}
-                      </option>
-                    ))}
-                  </select>
-                  {errors.state && (
-                    <div className="error-message-custom">
-                      <i className="bi bi-exclamation-circle"></i>
-                      {errors.state}
-                    </div>
-                  )}
-                </div>
-
-                <div className="form-group-custom">
-                  <label className="form-label-custom">
-                    Zip Code <span style={{color: 'rgb(150, 12, 34)'}}>*</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="zipcode"
-                    value={formData.zipcode}
-                    onChange={handleInputChange}
-                    maxLength={10}
-                    className={`form-control-custom ${errors.zipcode ? 'error' : ''}`}
-                    placeholder="12345 or 12345-6789"
-                  />
-                  {errors.zipcode && (
-                    <div className="error-message-custom">
-                      <i className="bi bi-exclamation-circle"></i>
-                      {errors.zipcode}
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Skills Section */}
-            <div className="mb-5">
-              <div className="section-header">
-                <div className="section-icon">
-                  <i className="bi bi-gear"></i>
-                </div>
-                <h3 className="section-title">Skills & Preferences</h3>
-              </div>
-              
-              <div className="form-group-custom">
-                <label className="form-label-custom">
-                  Skills <span style={{color: 'rgb(150, 12, 34)'}}>*</span>
-                </label>
-                <div className="skills-container-custom">
-                  <div className="skills-grid-custom">
-                    {availableSkills.map(skill => (
-                      <div key={skill.id} className="skill-item-custom">
-                        <input
-                          type="checkbox"
-                          className="skill-checkbox-custom"
-                          id={`skill-${skill.id}`}
-                          checked={formData.skills.includes(skill.id)}
-                          onChange={() => handleSkillToggle(skill.id)}
-                        />
-                        <label className="form-label-custom" htmlFor={`skill-${skill.id}`} style={{margin: 0}}>
-                          {skill.name}
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                {errors.skills && (
-                  <div className="error-message-custom">
-                    <i className="bi bi-exclamation-circle"></i>
-                    {errors.skills}
-                  </div>
-                )}
-              </div>
-
-              <div className="form-group-custom">
-                <label className="form-label-custom">Preferences (Optional)</label>
-                <textarea
-                  name="preferences"
-                  value={formData.preferences}
-                  onChange={handleInputChange}
-                  rows={4}
-                  className="form-control-custom"
-                  placeholder="Tell us about your volunteering preferences, schedule constraints, or any other relevant information..."
-                  style={{resize: 'vertical'}}
-                />
-              </div>
-            </div>
-
-            {/* Availability Section */}
-            <div className="mb-5">
-              <div className="section-header">
-                <div className="section-icon">
-                  <i className="bi bi-calendar"></i>
-                </div>
-                <h3 className="section-title">Availability</h3>
-              </div>
-              
-              <div className="form-group-custom">
-                <label className="form-label-custom">
-                  Available Dates <span style={{color: 'rgb(150, 12, 34)'}}>*</span>
-                </label>
-                <input
-                  type="date"
-                  onChange={handleDateChange}
-                  min={new Date().toISOString().split('T')[0]}
-                  className="form-control-custom"
-                  style={{maxWidth: '250px'}}
-                />
-                
-                {formData.availability.length > 0 && (
-                  <div style={{marginTop: '20px'}}>
-                    <h6 style={{color: 'rgb(84, 88, 90)', marginBottom: '15px'}}>Selected Dates:</h6>
-                    <div className="date-tags-custom">
-                      {formData.availability.map(date => (
-                        <span key={date} className="date-tag-custom">
-                          {new Date(date).toLocaleDateString()}
-                          <button
-                            type="button"
-                            onClick={() => removeDateFromAvailability(date)}
-                            className="remove-btn-custom"
-                            aria-label="Remove date"
-                          >
-                            ×
-                          </button>
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
-                {errors.availability && (
-                  <div className="error-message-custom">
-                    <i className="bi bi-exclamation-circle"></i>
-                    {errors.availability}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Action Buttons */}
-            <div style={{borderTop: '2px solid rgb(246, 190, 0)', paddingTop: '30px', display: 'flex', justifyContent: 'flex-end', gap: '15px'}}>
-              <button
-                type="button"
-                onClick={handleCancel}
-                className="btn-custom btn-secondary-custom"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={handleSubmit}
-                className="btn-custom btn-primary-custom"
-              >
-                Save Profile
-              </button>
+          <div style={{ gridColumn: '1 / -1' }}>
+            <div>Working Window</div>
+            <div style={{ display: 'flex', gap: 8, marginTop: 6 }}>
+              <input
+                type="time"
+                value={form.availability.windows[0].start}
+                onChange={e =>
+                  setForm(f => ({ ...f, availability: { ...f.availability, windows: [{ ...f.availability.windows[0], start: e.target.value }] } }))
+                }
+              />
+              <span>to</span>
+              <input
+                type="time"
+                value={form.availability.windows[0].end}
+                onChange={e =>
+                  setForm(f => ({ ...f, availability: { ...f.availability, windows: [{ ...f.availability.windows[0], end: e.target.value }] } }))
+                }
+              />
             </div>
           </div>
         </div>
+
+        <div style={{ marginTop: 12, display: 'flex', gap: 8 }}>
+          <button type="submit">{editingId ? 'Save Changes' : 'Create Profile'}</button>
+          {editingId && <button type="button" onClick={resetForm}>Cancel</button>}
+        </div>
+      </form>
+
+      {/* List */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+        <strong>{loading ? 'Loading…' : `${filteredByClient.length} of ${total} profiles`}</strong>
+        <button onClick={refresh}>Reload</button>
       </div>
 
-      {/* Bootstrap Icons CDN */}
-      <link
-        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css"
-        rel="stylesheet"
-      />
-    </>
+      <div style={{ overflowX: 'auto' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <thead>
+            <tr style={{ textAlign: 'left', borderBottom: '1px solid #ddd' }}>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Location</th>
+              <th>Skills</th>
+              <th>Days</th>
+              <th>Remote</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {!loading && filteredByClient.map(p => (
+              <tr key={p.id} style={{ borderBottom: '1px solid #eee' }}>
+                <td>{p.name}</td>
+                <td>{p.email}</td>
+                <td>{p.location.city}{p.location.state ? `, ${p.location.state}` : ''}, {p.location.country}</td>
+                <td>{p.skills.join(', ')}</td>
+                <td>{(p.availability?.days || []).join(' ')}</td>
+                <td>{p.preferences?.remoteOk ? 'Yes' : 'No'}</td>
+                <td style={{ display: 'flex', gap: 6 }}>
+                  <button onClick={() => onEdit(p.id)}>Edit</button>
+                  <button onClick={() => onDelete(p.id)}>Delete</button>
+                </td>
+              </tr>
+            ))}
+            {!loading && filteredByClient.length === 0 && (
+              <tr><td colSpan="7" style={{ padding: 12, color: '#888' }}>No profiles match.</td></tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
   );
-};
+}
 
-export default UserProfileManagement;
