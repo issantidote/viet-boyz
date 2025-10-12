@@ -457,7 +457,7 @@ export default function UserProfileManagement() {
       <div className="card" style={{ marginTop: 24 }}>
         <div className="profile-header" style={{ paddingBottom: 0 }}>
           <h3 style={{ marginBottom: 6 }}>Profiles</h3>
-          <div className="form-row-custom" style={{ gap: 10 }}>
+          <div className="form-row-custom" style={{ gap: 50 }}>
             <input
               className="form-control-custom"
               placeholder="Filter by city (client-side)"
@@ -478,14 +478,14 @@ export default function UserProfileManagement() {
               <option value="">Available day (server-side)</option>
               {DAYS.map(d => <option key={d} value={d}>{d}</option>)}
             </select>
-            <button className="btn-custom btn-secondary-custom" onClick={refresh} type="button">Refresh</button>
+            <button className="btn-custom btn-secondary-custom" onClick={refresh} type="button" style={{ marginBottom: 20 }}>Refresh</button>
           </div>
         </div>
 
         <div className="profile-body" style={{ paddingTop: 0 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
             <strong>{loading ? 'Loading…' : `${filteredByClient.length} of ${total} profiles`}</strong>
-            <button className="btn-custom btn-secondary-custom" onClick={refresh} type="button">Reload</button>
+            <button className="btn-custom btn-secondary-custom" onClick={refresh} type="button" style={{ marginTop: 20 }}>Reload</button>
           </div>
 
           <div style={{ overflowX: 'auto' }}>
