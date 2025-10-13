@@ -8,14 +8,18 @@ const emptyToUndef = (v) =>
     : v;
 
 export const Availability = z.object({
-  days: z.array(z.enum(['Mon','Tue','Wed','Thu','Fri','Sat','Sun'])).default([]),
+  days: z.array(z.enum(['Mon','Tue','Wed','Thu','Fri','Sat','Sun'])).min(1),
   windows: z.array(z.object({ start: z.string(), end: z.string() })).default([])
 });
 
 export const BaseProfile = z.object({
   name: z.string().min(1),
-  email: z.string().email(),
-  location: z.object({ city: z.string().min(1), state: z.string().optional() }),
+  location: z.object({
+    address1: z.string().min(1).max(100),
+    address2: z.string().max(100).optional(),
+    city: z.string().min(1),
+    state: z.string().optional()
+  }),
   skills: z.array(z.string()).default([]),
   preferences: z.object({ notes: z.string().optional() }).default({}),
   availability: Availability

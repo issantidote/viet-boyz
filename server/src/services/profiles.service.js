@@ -8,7 +8,7 @@ function matches(p, { city, skill, availableOn, q }) {
   if (skill && !p.skills.map(s=>s.toLowerCase()).includes(skill.toLowerCase())) return false;
   if (availableOn && !p.availability.days.includes(availableOn)) return false;
   if (q) {
-    const blob = [p.name, p.email, p.skills.join(' ')].join(' ').toLowerCase();
+    const blob = [p.name, p.skills.join(' ')].join(' ').toLowerCase();
     if (!blob.includes(q.toLowerCase())) return false;
   }
   return true;

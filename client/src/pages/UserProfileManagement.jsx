@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useRef } from 'react';
 import {
   listProfiles,
   createProfile,
@@ -13,6 +13,15 @@ import {
 // profile-container, card profile-card, section-header, form-group-custom, etc.
 
 const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const DAY_LABELS = {
+  Mon: 'Monday',
+  Tue: 'Tuesday',
+  Wed: 'Wednesday',
+  Thu: 'Thursday',
+  Fri: 'Friday',
+  Sat: 'Saturday',
+  Sun: 'Sunday'
+};
 
 const US_STATES = [
   'AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY'
@@ -20,12 +29,11 @@ const US_STATES = [
 
 const emptyForm = {
   name: '',
-  email: '',
-  location: { city: '', state: '' },
-  skillsCsv: '',       // UI-only, mapped to skills[]
+  location: { address1: '', address2: '', city: '', state: '' },
+  skills: [],
   // rolesCsv removed
   preferences: { notes: '' },
-  availability: { days: [], windows: [{ start: '09:00', end: '17:00' }] }
+  availability: { days: [] }
 };
 
 export default function UserProfileManagement() {
@@ -75,6 +83,19 @@ export default function UserProfileManagement() {
     });
   }, [items, filters.city, filters.skill]);
 
+  // curated Computer Science skill list (fixed)
+  const availableSkills = useMemo(() => [
+    'Algorithms', 'Data Structures', 'Databases', 'SQL', 'NoSQL', 'Operating Systems',
+    'Networking', 'Computer Architecture', 'Distributed Systems', 'Security', 'Cryptography',
+    'Machine Learning', 'Deep Learning', 'NLP', 'Computer Vision', 'Web Development',
+    'Frontend', 'Backend', 'DevOps', 'Docker', 'Kubernetes', 'Testing', 'CI/CD',
+    'Python', 'JavaScript', 'TypeScript', 'Java', 'C++', 'C#', 'Go', 'Rust', 'GraphQL',
+    'React', 'Node.js'
+  ], []);
+
+    const [skillsError, setSkillsError] = useState('');
+    const [daysError, setDaysError] = useState('');
+
   // helpers
   function msg(e) {
     try {
@@ -82,19 +103,38 @@ export default function UserProfileManagement() {
       return s.length > 400 ? s.slice(0, 400) + '…' : s;
     } catch { return 'Error'; }
   }
-  const csvToArray = (csv) => csv.split(',').map(s => s.trim()).filter(Boolean);
   const dedupe = (arr) => Array.from(new Set(arr));
+
+  const skillsRef = useRef(null);
+  const [showSkills, setShowSkills] = useState(false);
+
+  function toggleSkill(skill) {
+    setForm(f => {
+      const has = (f.skills || []).includes(skill);
+      const skills = has ? f.skills.filter(s => s !== skill) : [...(f.skills || []), skill];
+      return { ...f, skills };
+    });
+  }
+
+  useEffect(() => {
+    function onDocClick(e) {
+      if (showSkills && skillsRef.current && !skillsRef.current.contains(e.target)) {
+        setShowSkills(false);
+      }
+    }
+    document.addEventListener('click', onDocClick);
+    return () => document.removeEventListener('click', onDocClick);
+  }, [showSkills]);
 
   function onChange(e) {
     const { name, value, type, checked } = e.target;
 
-    if (name === 'name' || name === 'email') return setForm(f => ({ ...f, [name]: value }));
-    if (name === 'skillsCsv') return setForm(f => ({ ...f, skillsCsv: value }));
-  // rolesCsv removed
-  if (name === 'notes') return setForm(f => ({ ...f, preferences: { ...f.preferences, notes: value }}));
-  if (name === 'timezone') return; // timezone removed
+    if (name === 'name') return setForm(f => ({ ...f, [name]: value }));
+    // rolesCsv removed
+    if (name === 'notes') return setForm(f => ({ ...f, preferences: { ...f.preferences, notes: value }}));
+    if (name === 'timezone') return; // timezone removed
 
-    if (name === 'city' || name === 'state') {
+    if (name === 'city' || name === 'state' || name === 'address1' || name === 'address2') {
       return setForm(f => ({ ...f, location: { ...f.location, [name]: value }}));
     }
   }
@@ -110,20 +150,34 @@ export default function UserProfileManagement() {
   async function handleSubmit(e) {
     e.preventDefault();
     setError('');
+    // inline validation for skills
+    if (!form.skills || form.skills.length === 0) {
+      setSkillsError('Please select at least one skill');
+      return;
+    }
+    setSkillsError('');
+
+    // inline validation for available days (required)
+    if (!form.availability || !form.availability.days || form.availability.days.length === 0) {
+      setDaysError('Please select at least one available day');
+      return;
+    }
+    setDaysError('');
+
     const payload = {
       name: form.name.trim(),
-      email: form.email.trim(),
       location: {
+        address1: form.location.address1?.trim() || undefined,
+        address2: form.location.address2?.trim() || undefined,
         city: form.location.city.trim(),
         state: form.location.state.trim() || undefined
       },
-      skills: dedupe(csvToArray(form.skillsCsv)),
+  skills: dedupe(form.skills || []),
         preferences: {
         notes: form.preferences.notes?.trim() || undefined
       },
       availability: {
-        days: dedupe(form.availability.days),
-        windows: form.availability.windows.map(w => ({ start: w.start, end: w.end }))
+        days: dedupe(form.availability.days)
       }
     };
 
@@ -153,19 +207,16 @@ export default function UserProfileManagement() {
       setEditingId(id);
       setForm({
         name: p.name || '',
-        email: p.email || '',
         location: {
+          address1: p.location?.address1 || '',
+          address2: p.location?.address2 || '',
           city: p.location?.city || '',
           state: p.location?.state || ''
         },
-        skillsCsv: (p.skills || []).join(', '),
-  // rolesCsv removed
-  preferences: { notes: p.preferences?.notes || '' },
+  skills: (p.skills || []),
+        preferences: { notes: p.preferences?.notes || '' },
         availability: {
-          days: p.availability?.days || [],
-          windows: (p.availability?.windows && p.availability.windows.length > 0)
-            ? p.availability.windows
-            : [{ start: '09:00', end: '17:00' }]
+          days: p.availability?.days || []
         }
       });
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -210,7 +261,6 @@ export default function UserProfileManagement() {
               </div>
               <h3 className="section-title">Personal Information</h3>
             </div>
-
             <div className="form-row-custom">
               <div className="form-group-custom">
                 <label className="form-label-custom">Full Name <span style={{color: 'rgb(150, 12, 34)'}}>*</span></label>
@@ -225,30 +275,44 @@ export default function UserProfileManagement() {
                   required
                 />
               </div>
-
-              <div className="form-group-custom">
-                <label className="form-label-custom">Email <span style={{color: 'rgb(150, 12, 34)'}}>*</span></label>
-                <input
-                  type="email"
-                  name="email"
-                  value={form.email}
-                  onChange={onChange}
-                  maxLength={100}
-                  className="form-control-custom"
-                  placeholder="you@example.com"
-                  required
-                />
-              </div>
             </div>
           </div>
-
-          {/* Address Section (mapped to City/State/Country) */}
+          {/* Address (Address 1/2 + City/State) */}
           <div className="mb-5">
             <div className="section-header">
               <div className="section-icon">
                 <i className="bi bi-geo-alt"></i>
               </div>
-              <h3 className="section-title">Location</h3>
+              <h3 className="section-title">Address</h3>
+            </div>
+
+            <div className="form-row-custom">
+              <div className="form-group-custom">
+                <label className="form-label-custom">Address 1 <span style={{color: 'rgb(150, 12, 34)'}}>*</span></label>
+                <input
+                  type="text"
+                  name="address1"
+                  value={form.location.address1}
+                  onChange={onChange}
+                  maxLength={100}
+                  className="form-control-custom"
+                  placeholder="Street address, P.O. box, company name, c/o"
+                  required
+                />
+              </div>
+
+              <div className="form-group-custom">
+                <label className="form-label-custom">Address 2</label>
+                <input
+                  type="text"
+                  name="address2"
+                  value={form.location.address2}
+                  onChange={onChange}
+                  maxLength={100}
+                  className="form-control-custom"
+                  placeholder="Apt, suite, unit, building, floor (optional)"
+                />
+              </div>
             </div>
 
             <div className="form-row-custom">
@@ -273,8 +337,6 @@ export default function UserProfileManagement() {
                   {US_STATES.map(s => <option key={s} value={s}>{s}</option>)}
                 </select>
               </div>
-
-              {/* country removed (US-only) */}
             </div>
           </div>
 
@@ -287,23 +349,34 @@ export default function UserProfileManagement() {
               <h3 className="section-title">Skills & Preferences</h3>
             </div>
 
-            <div className="form-group-custom">
+            <div className="form-group-custom" ref={skillsRef} style={{ position: 'relative' }}>
               <label className="form-label-custom">Skills <span style={{color: 'rgb(150, 12, 34)'}}>*</span></label>
-              <input
-                type="text"
-                name="skillsCsv"
-                value={form.skillsCsv}
-                onChange={onChange}
-                className="form-control-custom"
-                placeholder="React, Node.js, SQL, etc."
-              />
-              <small className="helper-text">Comma-separated list. Saved as an array.</small>
-            </div>
-
-            <div className="form-row-custom">
-              {/* preferred roles removed */}
-
-              {/* remote option removed */}
+              <button type="button" className="form-control-custom" onClick={() => setShowSkills(s => !s)} style={{ textAlign: 'left' }}>
+                {form.skills && form.skills.length > 0 ? form.skills.join(', ') : 'Select skills...'}
+              </button>
+              {showSkills && (
+                <div style={{ position: 'absolute', zIndex: 50, background: '#fff', border: '1px solid #ddd', width: '100%', maxHeight: 240, overflow: 'auto', padding: 8 }}>
+                  {/* defensive: if availableSkills is empty (unexpected), fall back to a small default list */}
+                  {((availableSkills && availableSkills.length) ? availableSkills : [
+                    'Algorithms','Data Structures','Databases','Web Development','React','Node.js','Python','JavaScript'
+                  ]).map(s => (
+                    <label key={s} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 4px', cursor: 'pointer' }}>
+                      <input
+                        type="checkbox"
+                        checked={(form.skills || []).includes(s)}
+                        onChange={() => toggleSkill(s)}
+                        style={{ width: 16, height: 16 }}
+                      />
+                      <span style={{ color: '#111' }}>{s}</span>
+                    </label>
+                  ))}
+                  {!availableSkills || availableSkills.length === 0 ? (
+                    <div style={{ padding: 8, color: '#666' }}>No skills available.</div>
+                  ) : null}
+                </div>
+              )}
+              <small className="helper-text">Choose one or more Computer Science skills. Required.</small>
+              {skillsError && <div style={{ color: 'red', marginTop: 6 }}>{skillsError}</div>}
             </div>
 
             <div className="form-group-custom">
@@ -332,7 +405,7 @@ export default function UserProfileManagement() {
             <div className="form-row-custom">
               <div className="form-group-custom" style={{ gridColumn: 'span 2' }}>
                 <label className="form-label-custom">Available Days</label>
-                <div className="date-tags-custom" style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+                <div className="date-tags-custom" style={{ display: 'flex', flexWrap: 'nowrap', gap: 12 }}>
                   {DAYS.map(d => (
                     <label key={d} className="skill-item-custom" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                       <input
@@ -341,43 +414,11 @@ export default function UserProfileManagement() {
                         onChange={() => toggleDay(d)}
                         className="skill-checkbox-custom"
                       />
-                      <span>{d}</span>
+                      <span style={{ color: '#111', fontWeight: 500 }}>{DAY_LABELS[d] || d}</span>
                     </label>
                   ))}
                 </div>
-              </div>
-            </div>
-
-            <div className="form-group-custom">
-              <label className="form-label-custom">Working Window</label>
-              <div className="form-row-custom" style={{ alignItems: 'center' }}>
-                <input
-                  type="time"
-                  value={form.availability.windows[0].start}
-                  onChange={e => setForm(f => ({
-                    ...f,
-                    availability: {
-                      ...f.availability,
-                      windows: [{ ...f.availability.windows[0], start: e.target.value }]
-                    }
-                  }))}
-                  className="form-control-custom"
-                  style={{ maxWidth: 200 }}
-                />
-                <span style={{ padding: '0 8px' }}>to</span>
-                <input
-                  type="time"
-                  value={form.availability.windows[0].end}
-                  onChange={e => setForm(f => ({
-                    ...f,
-                    availability: {
-                      ...f.availability,
-                      windows: [{ ...f.availability.windows[0], end: e.target.value }]
-                    }
-                  }))}
-                  className="form-control-custom"
-                  style={{ maxWidth: 200 }}
-                />
+                {daysError && <div style={{ color: 'red', marginTop: 8 }}>{daysError}</div>}
               </div>
             </div>
           </div>
@@ -423,7 +464,7 @@ export default function UserProfileManagement() {
               onChange={e => setFilters(f => ({ ...f, availableOn: e.target.value }))}
             >
               <option value="">Available day</option>
-              {DAYS.map(d => <option key={d} value={d}>{d}</option>)}
+              {DAYS.map(d => <option key={d} value={d}>{DAY_LABELS[d] || d}</option>)}
             </select>
             <button className="btn-custom btn-secondary-custom" onClick={refresh} type="button" style={{ marginBottom: 20 }}>Refresh</button>
           </div>
@@ -440,9 +481,9 @@ export default function UserProfileManagement() {
               <thead>
                 <tr>
                   <th>Name</th>
-                  <th>Email</th>
                   <th>Location</th>
                   <th>Skills</th>
+                  <th>Notes</th>
                   <th>Days</th>
                   <th>Actions</th>
                 </tr>
@@ -450,11 +491,13 @@ export default function UserProfileManagement() {
               <tbody>
                 {!loading && filteredByClient.map(p => (
                   <tr key={p.id}>
-                    <td>{p.name}</td>
-                    <td>{p.email}</td>
-                    <td>{p.location.city}{p.location.state ? `, ${p.location.state}` : ''}</td>
+                      <td>{p.name}</td>
+                      <td>{p.location.city}{p.location.state ? `, ${p.location.state}` : ''}</td>
                     <td>{(p.skills || []).join(', ')}</td>
-                    <td>{(p.availability?.days || []).join(' ')}</td>
+                    <td style={{ color: '#555' }}>{p.preferences?.notes ? p.preferences.notes : '—'}</td>
+                    <td>{(p.availability?.days || []).map(d => (
+                      <span key={d} style={{ color: '#111', fontWeight: 500, marginRight: 8 }}>{DAY_LABELS[d] || d}</span>
+                    ))}</td>
                     <td style={{ display: 'flex', gap: 6 }}>
                       <button className="btn-custom btn-secondary-custom" onClick={() => onEdit(p.id)} type="button">Edit</button>
                       <button className="btn-custom btn-danger-custom" onClick={() => onDelete(p.id)} type="button">Delete</button>

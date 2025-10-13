@@ -655,6 +655,107 @@ html, body, #root {
 }
 // END OF USER PROFILE MANAGEMENT PAGE STYLING
 
+/* Ensure profile list tables show readable text regardless of parent color rules */
+.table-custom {
+  width: 100%;
+  border-collapse: collapse;
+}
+.table-custom th,
+.table-custom td {
+  color: #111;
+  padding: 12px 16px;
+  vertical-align: top;
+}
+
+/* Polished layout for profile list */
+.table-custom {
+  table-layout: fixed; /* enforce column widths */
+  width: 100%;
+}
+.table-custom thead th {
+  text-align: left;
+  font-weight: 700;
+  color: $slate;
+  border-bottom: 2px solid $gold;
+  background: transparent;
+  padding: 16px;
+}
+.table-custom tbody tr {
+  transition: background-color 0.15s ease;
+}
+.table-custom tbody tr:hover {
+  background: rgba(0,0,0,0.02);
+}
+.table-custom td {
+  white-space: normal;
+  /* avoid breaking inside words (break-word can split words unexpectedly) */
+  word-break: normal;
+  overflow-wrap: break-word;
+  color: #111;
+  padding: 18px 16px;
+}
+
+/* Ensure inline day/skill spans don't break mid-word; allow wrapping between items */
+.table-custom td span {
+  display: inline-block;
+  white-space: nowrap;
+  margin-right: 8px;
+}
+
+/* column sizing: Name | Location | Skills | Days | Actions */
+.table-custom th:nth-child(1), .table-custom td:nth-child(1) { width: 18%; }
+.table-custom th:nth-child(2), .table-custom td:nth-child(2) { width: 18%; }
+.table-custom th:nth-child(3), .table-custom td:nth-child(3) { width: 42%; }
+.table-custom th:nth-child(4), .table-custom td:nth-child(4) { width: 15%; }
+.table-custom th:nth-child(5), .table-custom td:nth-child(5) { width: 7%; text-align: right; }
+
+.table-custom .actions-cell {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  align-items: center;
+}
+
+/* make skill lists wrap nicely and slightly muted */
+.table-custom td:nth-child(3) {
+  color: $slate;
+  font-size: 0.98rem;
+}
+
+@media (max-width: 900px) {
+  .table-custom th:nth-child(1), .table-custom td:nth-child(1),
+  .table-custom th:nth-child(2), .table-custom td:nth-child(2),
+  .table-custom th:nth-child(3), .table-custom td:nth-child(3),
+  .table-custom th:nth-child(4), .table-custom td:nth-child(4),
+  .table-custom th:nth-child(5), .table-custom td:nth-child(5) {
+    width: auto;
+  }
+  .form-row-custom { width: 100vw; }
+}
+
+/* Make action buttons inside the profile list compact so they fit the text */
+.table-custom td .btn-custom {
+  padding: 6px 12px;
+  font-size: 0.95rem;
+  border-radius: 8px;
+  min-width: 72px; /* ensure text fits on one line */
+  height: 36px; /* square-ish */
+  white-space: nowrap; /* keep text on one line */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.table-custom td .btn-danger-custom {
+  padding: 6px 12px;
+  min-width: 78px;
+}
+.table-custom td .btn-secondary-custom {
+  padding: 6px 12px;
+}
+
+
+
 
 //this is used for forms to give the red font color specifically for the *
 .required-asterisk {
