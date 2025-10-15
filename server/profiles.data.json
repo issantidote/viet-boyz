@@ -1,0 +1,83 @@
+[
+  {
+    "id": "e54eaddf-faac-4bf3-bf91-379c5e764945",
+    "createdAt": "2025-10-13T00:55:32.494Z",
+    "updatedAt": "2025-10-13T00:55:32.494Z",
+    "name": "Ahihihi",
+    "location": {
+      "address1": "1234 Bumble St",
+      "address2": "#5",
+      "city": "Houston",
+      "state": "TX"
+    },
+    "skills": [
+      "Algorithms",
+      "Data Structures"
+    ],
+    "preferences": {},
+    "availability": {
+      "days": [
+        "Tue"
+      ],
+      "windows": []
+    }
+  },
+  {
+    "id": "c496b619-5b19-4a38-93b0-465485dde23f",
+    "createdAt": "2025-10-13T01:01:09.729Z",
+    "updatedAt": "2025-10-13T01:01:09.729Z",
+    "name": "Nathan Tran",
+    "location": {
+      "address1": "111 Main",
+      "address2": "5",
+      "city": "Houston",
+      "state": "TX"
+    },
+    "skills": [
+      "Algorithms",
+      "Data Structures",
+      "Databases"
+    ],
+    "preferences": {
+      "notes": "Helooooo"
+    },
+    "availability": {
+      "days": [
+        "Tue",
+        "Wed",
+        "Thu"
+      ],
+      "windows": []
+    }
+  },
+  {
+    "id": "a85bff7e-49c2-4484-956f-7297418a7855",
+    "createdAt": "2025-10-15T22:55:10.511Z",
+    "updatedAt": "2025-10-15T22:55:10.511Z",
+    "name": "sigma",
+    "location": {
+      "address1": "abc",
+      "city": "Chattanooga",
+      "state": "AK"
+    },
+    "skills": [
+      "Rust",
+      "Go",
+      "GraphQL",
+      "React",
+      "Node.js"
+    ],
+    "preferences": {
+      "notes": "please don't make me volunteer please please please 😭 😭😭😭😭😭 😭😭😭 :("
+    },
+    "availability": {
+      "days": [
+        "Mon",
+        "Tue",
+        "Wed",
+        "Sun"
+      ],
+      "windows": []
+    }
+  }
+]

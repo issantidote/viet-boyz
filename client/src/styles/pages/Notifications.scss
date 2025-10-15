@@ -1,4 +1,5 @@
 @use "../colors.scss" as *;
+@use "sass:color";
 // TODO: add the shadow in colors.scss instead of rbg
 
 .notifications-page {
@@ -112,7 +113,7 @@
   text-align: center;
   padding: 48px;
   color: $custom-gray;
-  background: lighten($cream, 2%);
+  background: color.adjust($cream, $lightness: 15%);
   border: 2px dashed $gold;
   border-radius: 12px;
   font-style: italic;
