@@ -380,7 +380,7 @@ export default function UserProfileManagement() {
             </div>
 
             <div className="form-group-custom">
-              <label className="form-label-custom">Notes (Optional)</label>
+              <label className="form-label-custom">Preferences (Optional)</label>
               <textarea
                 name="notes"
                 value={form.preferences.notes}
@@ -483,7 +483,7 @@ export default function UserProfileManagement() {
                   <th>Name</th>
                   <th>Location</th>
                   <th>Skills</th>
-                  <th>Notes</th>
+                  <th>Preferences</th>
                   <th>Days</th>
                   <th>Actions</th>
                 </tr>
