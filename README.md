@@ -1,103 +1,68 @@
-// TODO:  read me file is a little messy 
+### Volunteer Matching App
 
-# Getting Started Front End
-Prerequisites
-- Node.js: Ensure you have Node.js installed. You can download it from [nodejs.org](https://nodejs.org/).
-- Docker: Install Docker Desktop from [docker.com](https://www.docker.com/products/docker-desktop). // unsure if we need this. haven't decided hosting service yet. 
+A full-stack web app that connects volunteers with events based on preferences and availability. Volunteers can create and manage profiles; organizers can discover volunteers by skills, location, and schedule.
 
-Installation
-1. Clone the Repository:
-   ```
-   git clone https://github.com/issantidote/viet-boyz.git
-   cd viet-boyz/client
-   ```
 
-2. Install Dependencies:
-   ```
-   npm install
-   ```
+### Setup
 
-// TODO: remove? 
-3. Run with Docker:
-   - Build and start the Docker container:
-     ```
-     docker-compose up --build
-     ```
+#### 1) Frontend (client)
 
-Running Locally
-- Start the Development Server:
-  ```
-  cd client && npm run dev
-  ```
-
-# Handling Dependency Issues
-Delete and reinstall dependencies
-```
-rm -rf node_modules
+```bash
+cd client
 npm install
+npm run dev
 ```
 
-Clear npm Cache
-```
-npm cache clean --force
-```
+#### 2) Backend (server)
 
-# Naming files and folders
-- Use Kebab Case for folder names. Example: user-profile, event-management
-- Use Pascal Case for component files. Ex: LoginForm.jsx, UserProfilePage.jsx
-- Use Camel case for non-component files (like hooks, utility, stuff related to api i think). Ex: apiService.jsx, useAuth.js
-- Use UPPERCASE_SNAKE_CASE for hardcoded constants
-
-# File System
-src/
-  ├── components/          # Reusable UI components
-  │   ├── common/          # Common components (e.g., buttons, inputs)
-  │   ├── auth/            # Authentication components (e.g., login, registration)
-  │   ├── profile/         # User profile components
-  │   ├── events/          # Event management components
-  │   ├── notifications/   # Notification components
-  │   └── history/         # Volunteer history components
-  ├── pages/               # Page components (e.g., Home, Dashboard)
-  ├── hooks/               # Custom React hooks
-  ├── context/             # Context API for global state management, FOLDER NOT MADE YET
-  ├── services/            # API service calls
-  ├── utils/               # Utility functions
-  ├── styles/              # Global styles and theme
-  ├── assets/              # Static assets (e.g., images, fonts)
-  ├── App.jsx              # Main application component
-  └── index.jsx            # Entry point
-
-
-
-
-# Getting Started Backend
-Installation
-1. Install Dependencies 
-```
+```bash
 cd server
 npm install
+npm run dev
 ```
 
-2. Install Test Dependencies (mocha)
+#### 3) Backend tests
+
+```bash
+cd server
+npm test
 ```
-npm install --save-dev mocha supertest
-// 'supertest' is optional and is for HTTP testing
-```
 
-3. Create your first test
-// TODO: more documentation on that
-I ran 'npm test' in 'cd server'
 
-Project Layout (Backend)
-server/
-  src/
-    index.js
-    routes/
-    ...
-  test/
-    sample.test.js
-  package.json
-  package-lock.json
-  .mocharc.json   # optional, for Mocha config
-  .env            # optional
+### Project Layout
 
+- `client/` – React app (Vite)
+  - `src/`
+    - `main.jsx` – App bootstrap
+    - `AppRoutes.jsx` – React Router routes
+    - `pages/` – Views (`LandingPage.jsx`, `UserProfileManagement.jsx`, `VolunteerHistory.jsx`, etc.)
+    - `styles/` – SCSS (`base.scss`, `colors.scss`, `components.scss`, `layout.scss`, `pages/…`)
+    - `services/` – API utilities (`profilesApi.js`)
+    - `assets/` – Images/static
+  - `vite.config.js` – Vite config
+  - `package.json` – Frontend scripts/deps
+
+- `server/` – Node/Express API
+  - `index.js` – Entrypoint (loads app, starts server)
+  - `package.json` – Backend scripts/deps
+  - `profiles.data.json` – File-based persistence (created at runtime)
+  - `test/` – Mocha tests (`UserProfileManagment.test.js`)
+  - `src/`
+    - `index.js` – Express app (middleware, routes)
+    - `routes/` – Route definitions (`profiles.routes.js`)
+    - `controllers/` – Request handlers (`profiles.controller.js`)
+    - `services/` – Business logic (`profiles.service.js`)
+    - `middlewares/` – Common middleware (`auth.js`, `validate.js`)
+    - `validations/` – Zod schemas (`profiles.schemas.js`)
+    - `store/` – In-memory storage (`memoryStore.js`)
+    - `utils/` – Helpers (`cache.js`, `persist.js`)
+
+### API Overview (Profiles)
+
+Base path: `/api/profiles`
+
+- `GET /api/profiles` – List with filters: `city`, `skill`, `availableOn`, `q`, `limit`, `offset`
+- `GET /api/profiles/:id` – Get by ID
+- `POST /api/profiles` – Create (requires `x-api-key` if `API_KEY` is set)
+- `PATCH /api/profiles/:id` – Partial update (requires `x-api-key` if `API_KEY` is set)
+- `DELETE /api/profiles/:id` – Delete (requires `x-api-key` if `API_KEY` is set)
