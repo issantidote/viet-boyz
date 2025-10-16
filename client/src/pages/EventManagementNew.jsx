@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from "react-router-dom";
 import "../styles/components.scss";
+import Banner from "./Banner";
 
 const EventManagementNew = () => {
   const [formData, setFormData] = useState({
@@ -106,9 +107,13 @@ const EventManagementNew = () => {
     <>
 
       <div className="profile-container">
-        <div className="card profile-card">
+        <div>
+          <Banner />
+        </div>
+        <div className="profile-card">
           {/* Header */}
           <div className="profile-header">
+            <h2>&emsp;</h2>
             <h2>Event Management</h2>
             <p>Create a new event</p> 
           </div>
