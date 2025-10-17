@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
 import { Link } from "react-router-dom";
 import "../styles/components.scss";
+import {
+  listEvents,
+  createEvents,
+  updateEvents,
+  deleteEvents,
+  getEvents
+} from '../services/eventApi';
 import Banner from "./Banner";
 
 const EventManagementNew = () => {
