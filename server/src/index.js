@@ -3,6 +3,7 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import cors from 'cors';
 import profilesRouter from './routes/profiles.routes.js';
+import volunteerHistoryRouter from './routes/volunteerHistory.routes.js';
 
 const app = express();
 
@@ -31,6 +32,7 @@ app.use((req, _res, next) => {
 
 app.get('/health', (_req, res) => res.json({ ok: true }));
 app.use('/api/profiles', profilesRouter);
+app.use('/api/volunteer-history', volunteerHistoryRouter);
 
 app.use((_req, res) => res.status(404).json({ error: 'Not found' }));
 app.use((err, _req, res, _next) => {
