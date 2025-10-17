@@ -122,12 +122,49 @@ const EventManagementUpdate = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+  /*
   const handleSubmit = () => {
     if (validateForm()) {
       console.log('Form submitted:', formData);
       alert('Event saved successfully!');
     }
   };
+  */
+
+    async function handleSubmit(e) {
+      e.preventDefault();
+      setErrors('');
+      // inline validation for skills
+      if (!formData.skills || formData.skills.length === 0) {
+        setErrors('Please select at least one skill');
+        return;
+      }
+  
+      const payload = {
+        eventName: formData.eventName.trim(),
+        eventDescription: formData.eventDescription.trim(),
+        location: formData.location.trim(),
+        skills: formData.skills,
+        urgency: formData.urgency.trim(),
+        eventDate: formData.date
+      };
+  
+      try {
+        const updated = await updateProfile(editingId, payload);
+        setItems(prev => prev.map(p => (p.id === editingId ? updated : p)));
+        resetForm();
+        alert('Event saved successfully!');
+      } catch (e2) {
+        try {
+          const s = typeof e2 === 'string' ? e2 : e2.message || 'Error';
+          setErrors(s.length > 400 ? s.slice(0, 400) + '…' : s);
+        } catch { 
+          setErrors(errors + " Error"); 
+          return;
+        }
+        
+      }
+    }
 
   const handleCancel = () => {
     setFormData({
