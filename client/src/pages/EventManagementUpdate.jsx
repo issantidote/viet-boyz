@@ -202,6 +202,7 @@ const EventManagementUpdate = () => {
           {/* Header */}
           <div className="profile-header">
             <h2>&emsp;</h2>
+            <h2>&emsp;</h2>
             <h2>Event Management</h2>
             <p>Edit An Event</p>
           </div>

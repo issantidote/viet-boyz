@@ -162,6 +162,7 @@ const EventManagementNew = () => {
           {/* Header */}
           <div className="profile-header">
             <h2>&emsp;</h2>
+            <h2>&emsp;</h2>
             <h2>Event Management</h2>
             <p>Create a new event</p> 
           </div>

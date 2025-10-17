@@ -277,6 +277,7 @@ const VolunteerMatching = () => {
           {/* Header */}
           <div className="profile-header">
             <h2>&emsp;</h2>
+            <h2>&emsp;</h2>
             <h2>Volunteer Matching</h2>
             <p>Match a volunteer with an event!</p>
           </div>
