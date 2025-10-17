@@ -97,105 +97,257 @@ before(async () => {
   }
 });
 
-describe('User Profile Management API - full CRUD', () => {
+describe('Event Management API - full CRUD', () => {
   let createdId = null;
 
   const buildProfile = () => ({
-    name: `Test User ${Date.now()}`,
-    location: { address1: '123 Test St', address2: '', city: 'Testville', state: 'TX' },
-    skills: ['React', 'Node.js'],
-    preferences: { notes: 'Test notes' },
-    availability: { days: ['Monday'] }
+    eventID: 1,
+    eventName: "fitness gram pacer test",
+    eventDescription: "The FitnessGram Pacer Test is a multistage aerobic capacity test that progressively gets more difficult as it continues. The 20 meter pacer test will begin in 30 seconds. Line up at the start. The running speed starts slowly but gets faster each minute after you hear this signal. A single lap should be completed every time you hear this sound. Remember to run in a straight line and run as long as possible. The second time you fail to complete a lap before the sound, your test is over. The test will begin on the word start. On your mark. Get ready! Start.",
+    location: "UH Rec Center",
+    skills: [
+        1,
+        4
+    ],
+    urgency: "Medium",
+    eventDate: "2025-10-4T00:55:32.494Z",
   });
 
-  it('GET /api/profiles -> returns list with items and total', async () => {
-    const res = await request(app).get('/api/profiles');
-    if (res.status !== 200) console.error('GET /api/profiles status', res.status, 'body:', res.body);
-    expect(res.status).to.equal(200);
-    expect(res.body).to.be.an('object');
-    expect(res.body).to.have.property('items').that.is.an('array');
-    expect(res.body).to.have.property('total').that.is.a('number');
-  });
-
-  it('POST /api/profiles -> creates a profile', async () => {
-    const payload = buildProfile();
-    const res = await request(app).post('/api/profiles').set('x-api-key', process.env.API_KEY).send(payload);
-    if (![200, 201].includes(res.status)) console.error('POST failed:', res.status, res.body);
-    expect([200, 201]).to.include(res.status);
-    expect(res.body).to.be.an('object');
-    expect(res.body).to.satisfy((b) => !!b.id || !!b._id);
-    createdId = res.body.id ?? res.body._id;
-  });
-
-  it('GET /api/profiles/:id -> retrieves created profile', async function () {
-    if (!createdId) this.skip();
-    const res = await request(app).get(`/api/profiles/${createdId}`);
-    expect(res.status).to.equal(200);
-    expect(res.body).to.have.property('id').that.satisfies((v) => !!v);
-    expect(res.body.name).to.be.a('string');
-  });
-
-  it('PUT /api/profiles/:id -> full replace (or fallback to PATCH) updates profile', async function () {
-    if (!createdId) this.skip();
-    const fullPayload = buildProfile(); // full valid shape required by many schemas
-
-    // try PUT first
-    const putRes = await request(app).put(`/api/profiles/${createdId}`).set('x-api-key', process.env.API_KEY).send(fullPayload);
-
-    if ([200, 201, 204].includes(putRes.status)) {
-      // treat 204 as success with no body
-      if (putRes.status === 204) {
-        // verify via GET
-        const getRes = await request(app).get(`/api/profiles/${createdId}`);
-        expect(getRes.status).to.equal(200);
-        expect(getRes.body.name).to.equal(fullPayload.name);
+  it('GET /api/volunteer-history -> returns list with items and total', async () => {
+      const res = await request(app).get('/api/volunteer-history');
+      if (res.status !== 200) console.error('GET /api/volunteer-history status', res.status, 'body:', res.body);
+      expect(res.status).to.equal(200);
+      expect(res.body).to.be.an('object');
+      expect(res.body).to.have.property('items').that.is.an('array');
+      expect(res.body).to.have.property('total').that.is.a('number');
+    });
+  
+    it('POST /api/volunteer-history -> creates a volunteer history event', async () => {
+      const payload = buildVolunteerEvent();
+      const res = await request(app).post('/api/volunteer-history').set('x-api-key', process.env.API_KEY).send(payload);
+      if (![200, 201].includes(res.status)) console.error('POST failed:', res.status, res.body);
+      expect([200, 201]).to.include(res.status);
+      expect(res.body).to.be.an('object');
+      expect(res.body).to.satisfy((b) => !!b.id || !!b._id);
+      expect(res.body.name).to.equal(payload.name);
+      expect(res.body.description).to.equal(payload.description);
+      expect(res.body.urgency).to.equal(payload.urgency);
+      expect(res.body.status).to.equal(payload.status);
+      createdId = res.body.id ?? res.body._id;
+    });
+  
+    it('GET /api/volunteer-history/:id -> retrieves created event', async function () {
+      if (!createdId) this.skip();
+      const res = await request(app).get(`/api/volunteer-history/${createdId}`);
+      expect(res.status).to.equal(200);
+      expect(res.body).to.have.property('id').that.satisfies((v) => !!v);
+      expect(res.body.name).to.be.a('string');
+      expect(res.body.description).to.be.a('string');
+      expect(res.body.urgency).to.be.oneOf(['High', 'Medium', 'Low']);
+      expect(res.body.status).to.be.oneOf(['Started', 'Not Start', 'Done']);
+    });
+  
+    it('PUT/PATCH /api/volunteer-history/:id -> updates volunteer history event', async function () {
+      if (!createdId) this.skip();
+      const updatePayload = { status: 'Started', participationHours: 6 };
+  
+      // try PATCH first
+      const patchRes = await request(app).patch(`/api/volunteer-history/${createdId}`).set('x-api-key', process.env.API_KEY).send(updatePayload);
+      
+      if ([200, 201, 204].includes(patchRes.status)) {
+        // PATCH succeeded
+        if (patchRes.status === 204) {
+          // verify via GET
+          const getRes = await request(app).get(`/api/volunteer-history/${createdId}`);
+          expect(getRes.status).to.equal(200);
+          expect(getRes.body.status).to.equal('Started');
+        } else {
+          expect(patchRes.body.status).to.equal('Started');
+          if (patchRes.body.participationHours !== undefined) {
+            expect(patchRes.body.participationHours).to.equal(6);
+          }
+        }
       } else {
-        expect([200, 201]).to.include(putRes.status);
-        if (putRes.body) expect(putRes.body.name).to.equal(fullPayload.name);
+        // try PUT as fallback
+        const fullPayload = buildVolunteerEvent();
+        Object.assign(fullPayload, updatePayload);
+        const putRes = await request(app).put(`/api/volunteer-history/${createdId}`).set('x-api-key', process.env.API_KEY).send(fullPayload);
+        expect([200, 201, 204]).to.include(putRes.status);
       }
-      return;
-    }
+    });
+  
+    it('DELETE /api/volunteer-history/:id -> deletes volunteer history event', async function () {
+      if (!createdId) this.skip();
+      const res = await request(app).delete(`/api/volunteer-history/${createdId}`).set('x-api-key', process.env.API_KEY);
+      expect([200, 204]).to.include(res.status);
+  
+      // verify deletion
+      const getRes = await request(app).get(`/api/volunteer-history/${createdId}`);
+      expect(getRes.status).to.equal(404);
+    });
+  
+    describe('Validation Tests', () => {
+      it('POST /api/volunteer-history -> rejects invalid urgency', async () => {
+        const payload = buildVolunteerEvent();
+        payload.urgency = 'Invalid';
+        const res = await request(app).post('/api/volunteer-history').set('x-api-key', process.env.API_KEY).send(payload);
+        expect(res.status).to.equal(400);
+      });
+  
+      it('POST /api/volunteer-history -> rejects invalid status', async () => {
+        const payload = buildVolunteerEvent();
+        payload.status = 'Invalid Status';
+        const res = await request(app).post('/api/volunteer-history').set('x-api-key', process.env.API_KEY).send(payload);
+        expect(res.status).to.equal(400);
+      });
+  
+      it('POST /api/volunteer-history -> rejects missing required fields', async () => {
+        const payload = { name: 'Incomplete Event' }; // missing required fields
+        const res = await request(app).post('/api/volunteer-history').set('x-api-key', process.env.API_KEY).send(payload);
+        expect(res.status).to.equal(400);
+      });
+  
+      it('POST /api/volunteer-history -> rejects empty required skills array', async () => {
+        const payload = buildVolunteerEvent();
+        payload.requiredSkills = [];
+        const res = await request(app).post('/api/volunteer-history').set('x-api-key', process.env.API_KEY).send(payload);
+        expect(res.status).to.equal(400);
+      });
+    });
+  
+    describe('Filtering and Query Tests', () => {
+      let testEvents = [];
+  
+      before(async () => {
+        // Create test events for filtering
+        const events = [
+          {
+            ...buildVolunteerEvent(),
+            name: 'Park Cleanup',
+            location: 'Memorial Park',
+            urgency: 'High',
+            status: 'Done',
+            requiredSkills: ['Outdoor', 'Cleaning']
+          },
+          {
+            ...buildVolunteerEvent(),
+            name: 'Food Drive',
+            location: 'Community Center',
+            urgency: 'Medium',
+            status: 'Started',
+            requiredSkills: ['Organization', 'Lifting']
+          }
+        ];
+  
+        for (const event of events) {
+          const res = await request(app).post('/api/volunteer-history').set('x-api-key', process.env.API_KEY).send(event);
+          if (res.status === 201 || res.status === 200) {
+            testEvents.push(res.body);
+          }
+        }
+      });
+  
+      it('GET /api/volunteer-history?urgency=High -> filters by urgency', async () => {
+        const res = await request(app).get('/api/volunteer-history?urgency=High');
+        expect(res.status).to.equal(200);
+        expect(res.body.items.every(event => event.urgency === 'High')).to.be.true;
+      });
+  
+      it('GET /api/volunteer-history?status=Done -> filters by status', async () => {
+        const res = await request(app).get('/api/volunteer-history?status=Done');
+        expect(res.status).to.equal(200);
+        expect(res.body.items.every(event => event.status === 'Done')).to.be.true;
+      });
+  
+      it('GET /api/volunteer-history?location=Memorial -> filters by location', async () => {
+        const res = await request(app).get('/api/volunteer-history?location=Memorial');
+        expect(res.status).to.equal(200);
+        // Should find events with Memorial in location
+      });
+  
+      it('GET /api/volunteer-history?skill=Organization -> filters by required skill', async () => {
+        const res = await request(app).get('/api/volunteer-history?skill=Organization');
+        expect(res.status).to.equal(200);
+        // Should find events that require Organization skill
+      });
+  
+      it('GET /api/volunteer-history?q=Park -> general search', async () => {
+        const res = await request(app).get('/api/volunteer-history?q=Park');
+        expect(res.status).to.equal(200);
+        // Should find events with "Park" in name, description, or location
+      });
+  
+      it('GET /api/volunteer-history?limit=1 -> limits results', async () => {
+        const res = await request(app).get('/api/volunteer-history?limit=1');
+        expect(res.status).to.equal(200);
+        expect(res.body.items.length).to.be.at.most(1);
+      });
+  
+      after(async () => {
+        // Cleanup test events
+        for (const event of testEvents) {
+          await request(app).delete(`/api/volunteer-history/${event.id}`).set('x-api-key', process.env.API_KEY);
+        }
+      });
+    });
+  
+    describe('Additional Routes Tests', () => {
+      let testEvent;
+  
+      before(async () => {
+        const payload = buildVolunteerEvent();
+        const res = await request(app).post('/api/volunteer-history').set('x-api-key', process.env.API_KEY).send(payload);
+        testEvent = res.body;
+      });
+  
+      it('GET /api/volunteer-history/volunteer/:volunteerId -> gets events by volunteer', async function () {
+        if (!testEvent) this.skip();
+        const res = await request(app).get(`/api/volunteer-history/volunteer/${testEvent.volunteerId}`);
+        expect(res.status).to.equal(200);
+        expect(res.body).to.have.property('items').that.is.an('array');
+        expect(res.body).to.have.property('total').that.is.a('number');
+      });
+  
+      it('GET /api/volunteer-history/status/:status -> gets events by status', async function () {
+        if (!testEvent) this.skip();
+        const res = await request(app).get(`/api/volunteer-history/status/${testEvent.status}`);
+        expect(res.status).to.equal(200);
+        expect(res.body).to.have.property('items').that.is.an('array');
+      });
+  
+      it('GET /api/volunteer-history/stats/overview -> gets statistics', async () => {
+        const res = await request(app).get('/api/volunteer-history/stats/overview');
+        expect(res.status).to.equal(200);
+        expect(res.body).to.have.property('total').that.is.a('number');
+        expect(res.body).to.have.property('byStatus').that.is.an('object');
+        expect(res.body).to.have.property('byUrgency').that.is.an('object');
+        expect(res.body).to.have.property('totalHours').that.is.a('number');
+      });
+  
+      after(async () => {
+        // Cleanup test event
+        if (testEvent) {
+          await request(app).delete(`/api/volunteer-history/${testEvent.id}`).set('x-api-key', process.env.API_KEY);
+        }
+      });
+    });
+  
+    describe('Authentication Tests', () => {
+      it('POST /api/volunteer-history without API key -> returns 401/403', async () => {
+        const payload = buildVolunteerEvent();
+        const res = await request(app).post('/api/volunteer-history').send(payload);
+        expect([401, 403]).to.include(res.status);
+      });
+  
+      it('PATCH /api/volunteer-history/:id without API key -> returns 401/403', async () => {
+        const res = await request(app).patch('/api/volunteer-history/fake-id').send({ status: 'Done' });
+        expect([401, 403]).to.include(res.status);
+      });
+  
+      it('DELETE /api/volunteer-history/:id without API key -> returns 401/403', async () => {
+        const res = await request(app).delete('/api/volunteer-history/fake-id');
+        expect([401, 403]).to.include(res.status);
+      });
+    });
 
-    // if PUT not supported (404/405) or rejected (400), try PATCH as fallback
-    if ([404, 405, 400].includes(putRes.status)) {
-      const patchPayload = { name: `Patched User ${Date.now()}` };
-      const patchRes = await request(app).patch(`/api/profiles/${createdId}`).set('x-api-key', process.env.API_KEY).send(patchPayload);
-      if (patchRes.status !== 200) {
-        console.error('PUT failed and PATCH also failed:', putRes.status, putRes.body, patchRes.status, patchRes.body);
-        throw new Error(`Update failed (PUT ${putRes.status}, PATCH ${patchRes.status})`);
-      }
-      expect(patchRes.body).to.have.property('id', createdId);
-      expect(patchRes.body.name).to.equal(patchPayload.name);
-      return;
-    }
-
-    // unexpected status
-    console.error('Unexpected PUT response:', putRes.status, putRes.body);
-    throw new Error(`Unexpected PUT status ${putRes.status}`);
-  });
-
-  it('PATCH /api/profiles/:id -> partial update works', async function () {
-    if (!createdId) this.skip();
-    const patch = { preferences: { notes: 'Updated via PATCH' } };
-    const res = await request(app).patch(`/api/profiles/${createdId}`).set('x-api-key', process.env.API_KEY).send(patch);
-    if (res.status !== 200) {
-      console.error('PATCH failed:', res.status, res.body);
-      throw new Error(`Unexpected patch status ${res.status}`);
-    }
-    expect(res.body).to.have.property('id', createdId);
-    expect(res.body.preferences).to.be.an('object');
-  });
-
-  it('DELETE /api/profiles/:id -> removes profile', async function () {
-    if (!createdId) this.skip();
-    const res = await request(app).delete(`/api/profiles/${createdId}`).set('x-api-key', process.env.API_KEY);
-    if (![200, 204].includes(res.status)) {
-      console.error('DELETE failed:', res.status, res.body);
-      throw new Error(`Unexpected delete status ${res.status}`);
-    }
-
-    // expect 404 after delete
-    await request(app).get(`/api/profiles/${createdId}`).expect(404);
-    createdId = null;
-  });
 });
