@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import * as VolunteerHistory from '../controllers/volunteerHistory.controller.js';
-import { requireApiKey } from '../middlewares/auth.js';
+import { requireApiKey, extractUser } from '../middlewares/auth.js';
 import { validate } from '../middlewares/validate.js';
 import { 
   createVolunteerEventSchema, 
@@ -9,6 +9,9 @@ import {
 } from '../validations/volunteerHistory.schemas.js';
 
 const r = Router();
+
+// Apply user extraction to all routes
+r.use(extractUser);
 
 // Specialized routes MUST come before parameterized routes
 r.get('/volunteer/:volunteerId', VolunteerHistory.getByVolunteerId);

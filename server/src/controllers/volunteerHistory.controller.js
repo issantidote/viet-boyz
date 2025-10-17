@@ -4,7 +4,8 @@ import * as svc from '../services/volunteerHistory.service.js';
 export const list = async (req, res, next) => {
   try {
     const query = req.validatedQuery || req.query || {};
-    const data = await svc.list(query);
+    const userId = req.user?.id;
+    const data = await svc.list(query, userId);
     res.json(data);
   } catch (e) { 
     next(e); 
@@ -13,7 +14,8 @@ export const list = async (req, res, next) => {
 
 export const getById = async (req, res, next) => {
   try {
-    const event = await svc.getById(req.params.id);
+    const userId = req.user?.id;
+    const event = await svc.getById(req.params.id, userId);
     if (!event) {
       return res.status(404).json({ error: 'Volunteer history event not found' });
     }
@@ -25,7 +27,8 @@ export const getById = async (req, res, next) => {
 
 export const create = async (req, res, next) => {
   try {
-    const newEvent = await svc.create(req.body);
+    const userId = req.user?.id;
+    const newEvent = await svc.create(req.body, userId);
     res.status(201).json(newEvent);
   } catch (e) { 
     next(e); 
@@ -34,9 +37,10 @@ export const create = async (req, res, next) => {
 
 export const update = async (req, res, next) => {
   try {
-    const updated = await svc.update(req.params.id, req.body);
+    const userId = req.user?.id;
+    const updated = await svc.update(req.params.id, req.body, userId);
     if (!updated) {
-      return res.status(404).json({ error: 'Volunteer history event not found' });
+      return res.status(404).json({ error: 'Volunteer history event not found or access denied' });
     }
     res.json(updated);
   } catch (e) { 
@@ -46,9 +50,10 @@ export const update = async (req, res, next) => {
 
 export const remove = async (req, res, next) => {
   try {
-    const ok = await svc.remove(req.params.id);
+    const userId = req.user?.id;
+    const ok = await svc.remove(req.params.id, userId);
     if (!ok) {
-      return res.status(404).json({ error: 'Volunteer history event not found' });
+      return res.status(404).json({ error: 'Volunteer history event not found or access denied' });
     }
     res.status(204).send();
   } catch (e) { 

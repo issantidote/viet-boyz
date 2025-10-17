@@ -143,6 +143,8 @@ Run the comprehensive test suite with:
 
 ```bash
 cd server
+# If you get "command not found: npm", add /usr/local/bin to PATH:
+export PATH="/usr/local/bin:$PATH"
 npm test -- --grep "Volunteer History"
 ```
 

@@ -20,6 +20,8 @@ export const BaseVolunteerEvent = z.object({
     errorMap: () => ({ message: 'Status must be Started, Not Start, or Done' })
   }),
   eventDate: z.string().optional(), // ISO date string for when the event occurred/will occur
+  startTime: z.string().optional(), // ISO datetime string for event start time
+  endTime: z.string().optional(), // ISO datetime string for event end time
   volunteerId: z.string().optional(), // Link to volunteer profile if needed
   organizerId: z.string().optional(), // Link to organizer if needed
   participationHours: z.number().min(0).optional(), // Hours contributed

@@ -1,45 +1,60 @@
 import { v4 as uuid } from 'uuid';
-import store from '../store/memoryStore.js';
 import { memoizeByKey } from '../utils/cache.js';
-import { persistToFile } from '../utils/persist.js';
+import fs from 'fs';
 
-// Custom store key for volunteer history to separate from profiles
-const VOLUNTEER_HISTORY_KEY = 'volunteer-history';
+// Volunteer History specific data storage
+const VOLUNTEER_HISTORY_FILE = 'volunteerHistory.data.json';
+const volunteerHistoryMap = new Map();
+
+// Load volunteer history data from file on startup
+function loadVolunteerHistoryData() {
+  if (fs.existsSync(VOLUNTEER_HISTORY_FILE)) {
+    try {
+      const data = JSON.parse(fs.readFileSync(VOLUNTEER_HISTORY_FILE, 'utf8'));
+      if (Array.isArray(data)) {
+        data.forEach(item => volunteerHistoryMap.set(item.id, item));
+        console.log(`Loaded ${data.length} volunteer history events from file`);
+      }
+    } catch (e) {
+      console.warn('Failed to load volunteer history data file:', e.message);
+    }
+  }
+}
+
+// Save volunteer history data to file
+async function saveVolunteerHistoryData() {
+  try {
+    const data = Array.from(volunteerHistoryMap.values());
+    await fs.promises.writeFile(VOLUNTEER_HISTORY_FILE, JSON.stringify(data, null, 2), 'utf8');
+  } catch (e) {
+    console.error('Failed to save volunteer history data:', e.message);
+  }
+}
+
+// Load data on module initialization
+loadVolunteerHistoryData();
 
 // Enhanced store wrapper for volunteer history
 const volunteerHistoryStore = {
   getAll() {
-    const data = store.get(VOLUNTEER_HISTORY_KEY) || [];
-    return Array.isArray(data) ? data : [];
+    return Array.from(volunteerHistoryMap.values());
   },
   get(id) {
-    const all = this.getAll();
-    return all.find(item => item.id === id) || null;
+    return volunteerHistoryMap.get(id) || null;
   },
   set(id, item) {
-    const all = this.getAll();
-    const index = all.findIndex(existing => existing.id === id);
-    if (index >= 0) {
-      all[index] = item;
-    } else {
-      all.push(item);
-    }
-    store.set(VOLUNTEER_HISTORY_KEY, all);
+    volunteerHistoryMap.set(id, item);
   },
   delete(id) {
-    const all = this.getAll();
-    const index = all.findIndex(item => item.id === id);
-    if (index >= 0) {
-      all.splice(index, 1);
-      store.set(VOLUNTEER_HISTORY_KEY, all);
-      return true;
-    }
-    return false;
+    return volunteerHistoryMap.delete(id);
   }
 };
 
 // Filter function for volunteer history matching
-function matches(event, { name, location, skill, urgency, status, volunteerId, q }) {
+function matches(event, { name, location, skill, urgency, status, volunteerId, q, userId }) {
+  // First check user ownership - this is the most important filter
+  if (userId && event.userId !== userId) return false;
+  
   if (name && !event.name.toLowerCase().includes(name.toLowerCase())) return false;
   if (location && !event.location.toLowerCase().includes(location.toLowerCase())) return false;
   if (skill && !event.requiredSkills.map(s => s.toLowerCase()).includes(skill.toLowerCase())) return false;
@@ -81,7 +96,7 @@ const cachedList = memoizeByKey(async (key) => {
 });
 
 // Service functions
-export async function list(query) {
+export async function list(query, userId = null) {
   const key = JSON.stringify({
     name: query.name,
     location: query.location,
@@ -91,32 +106,43 @@ export async function list(query) {
     volunteerId: query.volunteerId,
     q: query.q,
     limit: query.limit,
-    offset: query.offset
+    offset: query.offset,
+    userId: userId // Include userId in cache key
   });
   return cachedList(key);
 }
 
-export async function getById(id) {
-  return volunteerHistoryStore.get(id);
+export async function getById(id, userId = null) {
+  const event = volunteerHistoryStore.get(id);
+  if (!event) return null;
+  
+  // Check if user owns this event
+  if (userId && event.userId !== userId) return null;
+  
+  return event;
 }
 
-export async function create(input) {
+export async function create(input, userId = null) {
   const now = new Date().toISOString();
   const event = { 
     id: uuid(), 
     createdAt: now, 
-    updatedAt: now, 
+    updatedAt: now,
+    userId: userId, // Associate with user
     ...input 
   };
   volunteerHistoryStore.set(event.id, event);
   cachedList.clear();
-  await persistToFile();
+  await saveVolunteerHistoryData();
   return event;
 }
 
-export async function update(id, patch) {
+export async function update(id, patch, userId = null) {
   const existing = volunteerHistoryStore.get(id);
   if (!existing) return null;
+  
+  // Check if user owns this event
+  if (userId && existing.userId !== userId) return null;
   
   const updated = { 
     ...existing, 
@@ -125,15 +151,21 @@ export async function update(id, patch) {
   };
   volunteerHistoryStore.set(id, updated);
   cachedList.clear();
-  await persistToFile();
+  await saveVolunteerHistoryData();
   return updated;
 }
 
-export async function remove(id) {
+export async function remove(id, userId = null) {
+  const existing = volunteerHistoryStore.get(id);
+  if (!existing) return false;
+  
+  // Check if user owns this event
+  if (userId && existing.userId !== userId) return false;
+  
   const ok = volunteerHistoryStore.delete(id);
   if (ok) {
     cachedList.clear();
-    await persistToFile();
+    await saveVolunteerHistoryData();
   }
   return ok;
 }
