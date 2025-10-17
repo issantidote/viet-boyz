@@ -86,11 +86,10 @@ html, body, #root {
 
 .form-page {
   min-height: 100vh;
-  padding-top: 60px;
-  height: auto;
+  padding-top: 0;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   background: white;
   box-sizing: border-box;
 }
