@@ -119,11 +119,11 @@ const EventManagementNew = () => {
       };
   
       try {
-        const created = await createProfile(payload);
+        const created = await createEvent(payload);
         setItems(prev => [created, ...prev]);
         /* 
         else {
-          const updated = await updateProfile(editingId, payload);
+          const updated = await updateEvent(editingId, payload);
           setItems(prev => prev.map(p => (p.id === editingId ? updated : p)));
         }
         */
