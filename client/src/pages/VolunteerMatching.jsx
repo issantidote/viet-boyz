@@ -23,7 +23,7 @@ const VolunteerMatching = () => {
       zipcode: 'my zip code',
       skills: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
       preferences: 'Please don\'t sign me up for an event please please please please please please :( :( :( :( :( :(',
-      availability: [new Date(2025, 10, 4).toDateString(), new Date(2025, 10, 6).toDateString(), new Date(2025, 10, 8).toDateString(), new Date(2025, 10, 27).toDateString()]
+      availability: [new Date(2025, 10, 4), new Date(2025, 10, 6), new Date(2025, 10, 8), new Date(2025, 10, 27)]
     },
     {
       fullName: 'Bryant T',
@@ -34,7 +34,7 @@ const VolunteerMatching = () => {
       zipcode: 'erm',
       skills: [1, 3, 4, 5],
       preferences: 'I\'m down for whatever',
-      availability: [new Date(2025, 10, 6).toDateString(), new Date(2025, 10, 8).toDateString(), new Date(2025, 10, 27).toDateString()]
+      availability: [new Date(2025, 10, 6), new Date(2025, 10, 8), new Date(2025, 10, 27)]
     },
     {
       fullName: 'Isa T',
@@ -45,7 +45,7 @@ const VolunteerMatching = () => {
       zipcode: 'uhh',
       skills: [2, 7],
       preferences: 'Very much looking forward to volunteering! :)',
-      availability: [new Date(2025, 10, 4).toDateString(), new Date(2025, 10, 8).toDateString(), new Date(2025, 10, 27).toDateString()]
+      availability: [new Date(2025, 10, 4), new Date(2025, 10, 8), new Date(2025, 10, 27)]
     },
     {
       fullName: 'Nathan T',
@@ -56,7 +56,7 @@ const VolunteerMatching = () => {
       zipcode: 'n/a',
       skills: [1,3,4],
       preferences: 'n/a',
-      availability: [new Date(2025, 10, 4), new Date(2025, 10, 6), new Date(2025, 10, 27).toDateString()]
+      availability: [new Date(2025, 10, 4), new Date(2025, 10, 6), new Date(2025, 10, 27)]
     }
   ]);
 
@@ -195,7 +195,7 @@ const VolunteerMatching = () => {
     var text = "";
     for(var i = 0; i < availabilitiesArray.length; i++)
     {
-      text = (text.trim() ? text + ", " + availabilitiesArray[i] : availabilitiesArray[i]);
+      text = (text.trim() ? text + ", " + availabilitiesArray[i].toDateString() : availabilitiesArray[i].toDateString());
     }
     return text;
   }
