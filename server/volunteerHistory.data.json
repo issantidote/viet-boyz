@@ -4,7 +4,11 @@
     "name": "Food Bank Packing",
     "description": "Pack and sort canned goods for distribution to families in need.",
     "location": "Houston Food Bank Warehouse",
-    "requiredSkills": ["Lifting", "Teamwork", "Organization"],
+    "requiredSkills": [
+      "Lifting",
+      "Teamwork",
+      "Organization"
+    ],
     "urgency": "High",
     "status": "Done",
     "eventDate": "2024-03-15T09:00:00Z",
@@ -22,7 +26,11 @@
     "name": "Community Park Cleanup",
     "description": "Trash pickup and light landscaping work in the community park.",
     "location": "Buffalo Bayou Park",
-    "requiredSkills": ["Outdoor", "Gardening", "Physical Labor"],
+    "requiredSkills": [
+      "Outdoor",
+      "Gardening",
+      "Physical Labor"
+    ],
     "urgency": "Medium",
     "status": "Started",
     "eventDate": "2024-04-20T08:00:00Z",
@@ -40,7 +48,12 @@
     "name": "Coding for Kids Workshop",
     "description": "Teach basic programming concepts using Scratch to 4th-5th grade students.",
     "location": "Montrose Library — Room B",
-    "requiredSkills": ["Teaching", "Python", "Public Speaking", "Patience"],
+    "requiredSkills": [
+      "Teaching",
+      "Python",
+      "Public Speaking",
+      "Patience"
+    ],
     "urgency": "Low",
     "status": "Not Start",
     "eventDate": "2024-05-10T14:00:00Z",
@@ -58,7 +71,11 @@
     "name": "Senior Center Reading",
     "description": "Read books and newspapers to elderly residents at local senior center.",
     "location": "Sunset Senior Center",
-    "requiredSkills": ["Reading", "Patience", "Communication"],
+    "requiredSkills": [
+      "Reading",
+      "Patience",
+      "Communication"
+    ],
     "urgency": "Medium",
     "status": "Done",
     "eventDate": "2024-03-10T10:00:00Z",
