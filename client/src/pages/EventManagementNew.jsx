@@ -315,7 +315,7 @@ const EventManagementNew = () => {
                 onClick={handleSubmit}
                 className="btn-custom btn-primary-custom"
               >
-                Save Profile
+                Create Event
               </button>
             </div>
 

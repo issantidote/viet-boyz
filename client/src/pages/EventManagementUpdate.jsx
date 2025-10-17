@@ -396,7 +396,7 @@ const EventManagementUpdate = () => {
                 onClick={handleSubmit}
                 className="btn-custom btn-primary-custom"
               >
-                Save Profile
+                Save Changes
               </button>
             </div>
 
