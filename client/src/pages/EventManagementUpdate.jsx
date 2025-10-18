@@ -2,6 +2,14 @@ import React, { useState } from 'react';
 import { Link } from "react-router-dom";
 import "../styles/components.scss";
 import "../styles/colors.scss";
+import {
+  listEvents,
+  createEvent,
+  updateEvent,
+  deleteEvent,
+  getEvent
+} from '../services/eventApi';
+import Banner from "./Banner";
 import Navigation from "../components/Navigation";
 
 const EventManagementUpdate = () => {
@@ -150,7 +158,7 @@ const EventManagementUpdate = () => {
       };
   
       try {
-        const updated = await updateProfile(editingId, payload);
+        const updated = await updateEvent(editingId, payload);
         setItems(prev => prev.map(p => (p.id === editingId ? updated : p)));
         resetForm();
         alert('Event saved successfully!');

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useMemo, useState, useRef } from 'react';
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import * as matchingApi from "../services/matchingApi";
@@ -6,18 +6,24 @@ import { listEvents } from "../services/eventApi";
 import { listProfiles } from "../services/profilesApi";
 import "../styles/components.scss";
 import "../styles/colors.scss";
+import Banner from "./Banner";
+import {
+  listEvents,
+  createEvent,
+  updateEvent,
+  deleteEvent,
+  getEvent
+} from '../services/eventApi';
+import {
+  listProfiles,
+  createProfile,
+  updateProfile,
+  deleteProfile,
+  getProfile
+} from '../services/profilesApi';
 import Navigation from "../components/Navigation";
 
-const VolunteerMatching = () => {
-    //id number of volunteer
-  const [volunteerName, setVolunteerName] = useState('');
-
-  const [volunteer] = useState([]);
-  
-  //list of all volunteers
-  const [volunteers, setVolunteers] =
-  //uses dummy placeholder data for now until truly hooked up to the db
-  useState([
+const MOCK_VOLUNTEERS = [
     {
       fullName: 'Jonathan V',
       address1: 'idk',
@@ -62,16 +68,9 @@ const VolunteerMatching = () => {
       preferences: 'n/a',
       availability: [new Date(2025, 10, 4), new Date(2025, 10, 6), new Date(2025, 10, 27)]
     }
-  ]);
+  ];
 
-  //used when getting the specific event to edit
-  const [eventName, setEventName] = useState(null);
-  //set to true if there is an event to edit (successfully selected)
-  const [eventFound, setEventFound] = useState(false);
-  //the events, pulled from DB
-  const [events, setEvents] = //useState(null);
-  //because backend and db is not set up yet, this will serve as placeholder data
-  useState([
+const MOCK_EVENTS = [
     {
       eventID: 1,
       eventName: 'fitness gram pacer test',
@@ -99,7 +98,40 @@ const VolunteerMatching = () => {
       urgency: 'High',
       eventDate: new Date(2025, 10, 8, 2, 35)
     }
-  ]);
+  ];
+
+const VolunteerMatching = () => {
+    //id number of volunteer
+  const [volunteerName, setVolunteerName] = useState('');
+
+  const [volunteer] = useState([]);
+  
+  //list of all volunteers
+  const [volunteers, setVolunteers] =
+  //uses dummy placeholder data for now until truly hooked up to the db
+  useState([]);
+
+
+
+  const [loading, setLoading] = useState(true);
+
+  // helpers
+  function msg(e) {
+    try {
+      const s = typeof e === 'string' ? e : e.message || 'Error';
+      return s.length > 400 ? s.slice(0, 400) + '…' : s;
+    } catch { return 'Error'; }
+  }
+  const dedupe = (arr) => Array.from(new Set(arr));
+
+  //used when getting the specific event to edit
+  const [eventName, setEventName] = useState(null);
+  //set to true if there is an event to edit (successfully selected)
+  const [eventFound, setEventFound] = useState(false);
+  //the events, pulled from DB
+  const [events, setEvents] = //useState(null);
+  //because backend and db is not set up yet, this will serve as placeholder data
+  useState([]);
 
   const [formData, setFormData] = useState({
     eventName: '',
@@ -297,25 +329,6 @@ const VolunteerMatching = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = () => {
-    if (validateForm()) {
-      console.log('Form submitted:', formData);
-      alert('Event saved successfully!');
-    }
-  };
-
-  const handleCancel = () => {
-    setFormData({
-    eventName: '',
-    eventDescription: '',
-    location: '',
-    skills: [],
-    urgency: '',
-    eventDate: ''
-    });
-    setErrors({});
-  };
-
   const handleFill = () => {
     setFormData({
     eventName: eventName,
@@ -326,6 +339,62 @@ const VolunteerMatching = () => {
     eventDate: new Date(2025, 10, 4, 12, 15)
     });
   };
+
+  // load list
+  async function refresh() {
+    try {
+      setLoading(true);
+      setErrors('');
+      const { volunteers, total } = await listProfiles({
+        limit: 200
+      });
+      setVolunteers(volunteers);
+      setTotal(total);
+    } catch (e) {
+      setErrors(errors + " " + msg(e));
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => { refresh(); /* eslint-disable-next-line */ }, []);
+  //useEffect(() => { refresh(); /* re-query when filters change */ }, [filters.availableOn]);
+
+  const fetchEvents = async (userId = volunteer) => {
+      try {
+        setLoading(true);
+        setErrors('');
+        
+        // Debug: Log the API URL being used
+        console.log('Fetching from API URL:', import.meta.env.VITE_API_URL || 'http://localhost:4000');
+        console.log('Full API endpoint:', `${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/events`);
+        console.log('For user:', userId);
+        
+        const response = await listEvents({ userId });
+        console.log('API Response:', response);
+        setEvents(response.items || []);
+      } catch (err) {
+        console.error('Failed to fetch events:', err);
+        console.error('Error details:', {
+          message: err.message,
+          stack: err.stack,
+          name: err.name
+        });
+        setErrors(err.message || 'Failed to load events');
+        // Fallback to mock data if API fails
+        //setEvents(MOCK_EVENTS);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    useEffect(() => {
+      fetchEvents();
+    }, [volunteer]);
+  
+    const handleUserChange = (e) => {
+      setVolunteer(e.target.value);
+    };
 
   return (
     <>
