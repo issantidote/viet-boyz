@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { listVolunteerHistory } from "../services/volunteerHistoryApi.js";
+import Navigation from "../components/Navigation";
 import "../styles/components.scss";
 
 
@@ -153,8 +154,10 @@ export default function VolunteerHistory() {
     );
   }
   return (
-    <div className="volunteer-history-container">
-      <h1 className="volunteer-history-header">Volunteer History</h1>
+    <>
+      <Navigation />
+      <div className="volunteer-history-container">
+        <h1 className="volunteer-history-header">Volunteer History</h1>
 
       {/* User Selector for Demo */}
       <div className="volunteer-user-selector">
@@ -252,6 +255,7 @@ export default function VolunteerHistory() {
           </div>
         )}
       </div>
-    </div>
+      </div>
+    </>
   );
 }

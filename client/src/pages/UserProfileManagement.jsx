@@ -6,6 +6,7 @@ import {
   deleteProfile,
   getProfile
 } from '../services/profilesApi';
+import Navigation from '../components/Navigation';
 
 // NOTE: This component keeps your existing data model & API calls
 // and only refactors the UI to match your previous assignment styles
@@ -236,13 +237,15 @@ export default function UserProfileManagement() {
   }
 
   return (
-    <div className="profile-container">
-      <div className="card profile-card">
-        {/* Header */}
-        <div className="profile-header">
-          <h2>Profile Management</h2>
-          <p>Complete your profile to participate in volunteer events</p>
-        </div>
+    <>
+      <Navigation />
+      <div className="profile-container">
+        <div className="card profile-card">
+          {/* Header */}
+          <div className="profile-header">
+            <h2>Profile Management</h2>
+            <p>Complete your profile to participate in volunteer events</p>
+          </div>
 
         {/* Top-level error */}
         {error && (
@@ -512,6 +515,7 @@ export default function UserProfileManagement() {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

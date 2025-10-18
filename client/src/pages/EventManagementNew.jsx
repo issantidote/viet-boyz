@@ -8,7 +8,7 @@ import {
   deleteEvent,
   getEvent
 } from '../services/eventApi';
-import Banner from "./Banner";
+import Navigation from "../components/Navigation";
 
 const EventManagementNew = () => {
   const [formData, setFormData] = useState({
@@ -156,7 +156,7 @@ const EventManagementNew = () => {
 
       <div className="profile-container">
         <div>
-          <Banner />
+          <Navigation />
         </div>
         <div className="profile-card">
           {/* Header */}

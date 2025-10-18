@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from "react-router-dom";
 import "../styles/components.scss";
 import "../styles/colors.scss";
-import Banner from "./Banner";
+import Navigation from "../components/Navigation";
 
 const EventManagementUpdate = () => {
   //used when getting the specific event to edit
@@ -196,7 +196,7 @@ const EventManagementUpdate = () => {
 
       <div className="profile-container">
         <div>
-          <Banner />
+          <Navigation />
         </div>
         <div className="profile-card">
           {/* Header */}
