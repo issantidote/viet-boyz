@@ -51,23 +51,23 @@ const eventStore = {
 };
 
 // Filter function for event matching
-function matches(event, { eventName, eventDescription, location, skill, urgency, status, eventDate, q }) {
+function matches(event, { eventName, eventDescription, location, skill, urgency, status, eventDate, q, userId }) {
   // First check user ownership - this is the most important filter
   if (userId && event.userId !== userId) return false;
   
-  if (eventName && !event.eventName.toLowerCase().includes(eventName.toLowerCase())) return false;
-  if (eventDescription && !event.eventDescription.toLowerCase().includes(eventDescription.toLowerCase())) return false;
-  if (location && !event.location.toLowerCase().includes(location.toLowerCase())) return false;
-  if (skill && !event.requiredSkills.map(s => s.toLowerCase()).includes(skill.toLowerCase())) return false;
+  if (eventName && !event.eventName?.toLowerCase().includes(eventName.toLowerCase())) return false;
+  if (eventDescription && !event.eventDescription?.toLowerCase().includes(eventDescription.toLowerCase())) return false;
+  if (location && !event.location?.toLowerCase().includes(location.toLowerCase())) return false;
+  if (skill && !(event.requiredSkills || []).map(s => s.toLowerCase()).includes(skill.toLowerCase())) return false;
   if (urgency && event.urgency !== urgency) return false;
   if (eventDate && event.eventDate !== eventDate) return false;
   //if (status && event.status !== status) return false;
   //if (volunteerId && event.volunteerId !== volunteerId) return false;
   if (q) {
     const searchText = [
-      event.name,
-      event.description,
-      event.location,
+      event.eventName || '',
+      event.eventDescription || '',
+      event.location || '',
       ...(event.requiredSkills || []),
       event.notes || ''
     ].join(' ').toLowerCase();
@@ -107,7 +107,7 @@ export async function list(query, userId = null) {
     urgency: query.urgency,
     //status: query.status,
     eventDate: query.eventDate,
-
+    userId: userId,
     q: query.q,
     limit: query.limit,
     offset: query.offset,
@@ -128,15 +128,15 @@ export async function getById(id, userId = null) {
 export async function create(input, userId = null) {
   const now = new Date().toISOString();
   const event = { 
-    //id: uuid(), 
-    //createdAt: now, 
-    //updatedAt: now,
-    //userId: userId, // Associate with user
+    id: uuid(), 
+    createdAt: now, 
+    updatedAt: now,
+    userId: userId, // Associate with user
     ...input 
   };
   eventStore.set(event.id, event);
   cachedList.clear();
-  await eventHistoryData();
+  await saveEventData();
   return event;
 }
 
@@ -150,11 +150,11 @@ export async function update(id, patch, userId = null) {
   const updated = { 
     ...existing, 
     ...patch, 
-    //updatedAt: new Date().toISOString() 
+    updatedAt: new Date().toISOString() 
   };
   eventStore.set(id, updated);
   cachedList.clear();
-  await eventData();
+  await saveEventData();
   return updated;
 }
 
