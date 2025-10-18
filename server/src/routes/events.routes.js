@@ -9,5 +9,5 @@ r.get('/', validate(listQuerySchema, 'query'), Events.list);
 r.get('/:id', Events.getById);
 r.post('/', requireApiKey, validate(createEventSchema), Events.create);
 r.patch('/:id', requireApiKey, validate(updateEventSchema), Events.update);
-r.delete('/:id', requireApiKey, Profiles.remove);
+r.delete('/:id', requireApiKey, Events.remove); 
 export default r;

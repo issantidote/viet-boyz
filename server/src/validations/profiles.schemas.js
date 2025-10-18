@@ -8,7 +8,7 @@ const emptyToUndef = (v) =>
     : v;
 
 export const Availability = z.object({
-  days: z.array(z.enum(['Monday','Tueday','Wednesday','Thursday','Friday','Saturday','Sunday'])).min(1),
+  days: z.array(z.enum(['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'])).min(1),
   windows: z.array(z.object({ start: z.string(), end: z.string() })).default([])
 });
 
