@@ -1,5 +1,7 @@
-import React, { useMemo, useState } from "react";
-import Banner from "./Banner";
+import React, { useMemo, useState, useEffect } from "react";
+import { useAuth } from "../contexts/AuthContext";
+import Navigation from "../components/Navigation";
+import * as notificationsApi from "../services/notificationsApi";
 import "../styles/pages/notifications.scss";
 
 const MOCK_NOTIFICATIONS = [
@@ -58,10 +60,38 @@ const sortOptions = [
 ];
 
 export default function Notifications() {
-  const [items, setItems] = useState(MOCK_NOTIFICATIONS);
+  const { user } = useAuth();
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [typeFilter, setTypeFilter] = useState("All");
   const [sort, setSort] = useState("newest");
   const [query, setQuery] = useState("");
+
+  // Fetch notifications from backend
+  useEffect(() => {
+    async function fetchNotifications() {
+      if (!user?.id) return;
+      
+      try {
+        setLoading(true);
+        setError("");
+        const data = await notificationsApi.listNotifications({ 
+          userId: user.id 
+        });
+        setItems(data || []);
+      } catch (err) {
+        console.error("Failed to fetch notifications:", err);
+        setError(err.message || "Failed to load notifications");
+        // Fallback to mock data if backend fails
+        setItems(MOCK_NOTIFICATIONS);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchNotifications();
+  }, [user]);
 
   const visibleItems = useMemo(() => {
     let data = [...items];
@@ -94,16 +124,41 @@ export default function Notifications() {
   }, [items, typeFilter, sort, query]);
 
   // checkings
-  const markAllRead = () => {
-    setItems(prev => prev.map(n => ({ ...n, read: true })));
+  const markAllRead = async () => {
+    try {
+      // Mark all unread notifications as read
+      const unread = items.filter(n => !n.read);
+      await Promise.all(unread.map(n => notificationsApi.markAsRead(n.id)));
+      setItems(prev => prev.map(n => ({ ...n, read: true })));
+    } catch (err) {
+      console.error("Failed to mark all as read:", err);
+      alert("Failed to mark all notifications as read");
+    }
   };
 
-  const toggleRead = (id) => {
-    setItems(prev => prev.map(n => (n.id === id ? { ...n, read: !n.read } : n)));
+  const toggleRead = async (id) => {
+    const notification = items.find(n => n.id === id);
+    if (!notification) return;
+
+    try {
+      if (!notification.read) {
+        await notificationsApi.markAsRead(id);
+      }
+      setItems(prev => prev.map(n => (n.id === id ? { ...n, read: !n.read } : n)));
+    } catch (err) {
+      console.error("Failed to toggle read status:", err);
+      alert("Failed to update notification status");
+    }
   };
 
-  const dismiss = (id) => {
-    setItems(prev => prev.filter(n => n.id !== id));
+  const dismiss = async (id) => {
+    try {
+      await notificationsApi.dismissNotification(id);
+      setItems(prev => prev.filter(n => n.id !== id));
+    } catch (err) {
+      console.error("Failed to dismiss notification:", err);
+      alert("Failed to dismiss notification");
+    }
   };
 
   const viewEvent = (eventId) => {
@@ -113,13 +168,33 @@ export default function Notifications() {
 
   return (
     <div className="notifications-page">
-      <Banner />
+      <Navigation />
 
       <div className="notifications-hero">
         <h2>Notifications</h2>
         <p>Assignments, updates, and reminders for your events</p>
       </div>
 
+      {loading && (
+        <div style={{ textAlign: 'center', padding: '2rem' }}>
+          <p>Loading notifications...</p>
+        </div>
+      )}
+
+      {error && (
+        <div style={{ 
+          padding: '1rem', 
+          margin: '1rem', 
+          backgroundColor: '#fff3cd', 
+          border: '1px solid #ffc107',
+          borderRadius: '4px',
+          color: '#856404'
+        }}>
+          ⚠️ {error}
+        </div>
+      )}
+
+      {!loading && (
       <div className="notifications-card">
         <div className="notifications-header">
           <div className="notifications-actions">
@@ -211,6 +286,7 @@ export default function Notifications() {
           rel="stylesheet"
         />
       </div>
+      )}
     </div>
   );
 }

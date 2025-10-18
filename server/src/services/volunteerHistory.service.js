@@ -55,17 +55,17 @@ function matches(event, { name, location, skill, urgency, status, volunteerId, q
   // First check user ownership - this is the most important filter
   if (userId && event.userId !== userId) return false;
   
-  if (name && !event.name.toLowerCase().includes(name.toLowerCase())) return false;
-  if (location && !event.location.toLowerCase().includes(location.toLowerCase())) return false;
-  if (skill && !event.requiredSkills.map(s => s.toLowerCase()).includes(skill.toLowerCase())) return false;
+  if (name && !event.name?.toLowerCase().includes(name.toLowerCase())) return false;
+  if (location && !event.location?.toLowerCase().includes(location.toLowerCase())) return false;
+  if (skill && !(event.requiredSkills || []).map(s => s.toLowerCase()).includes(skill.toLowerCase())) return false;
   if (urgency && event.urgency !== urgency) return false;
   if (status && event.status !== status) return false;
   if (volunteerId && event.volunteerId !== volunteerId) return false;
   if (q) {
     const searchText = [
-      event.name,
-      event.description,
-      event.location,
+      event.name || '',
+      event.description || '',
+      event.location || '',
       ...(event.requiredSkills || []),
       event.notes || ''
     ].join(' ').toLowerCase();

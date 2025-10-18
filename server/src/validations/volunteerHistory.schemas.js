@@ -1,45 +1,41 @@
-// server/src/validations/volunteerHistory.schemas.js
 import { z } from 'zod';
 
-// helper to normalize empty values from query strings
 const emptyToUndef = (v) =>
   v === '' || v === 'undefined' || v === 'null' || v === undefined || v === null
     ? undefined
     : v;
 
 // Base volunteer history event schema
-export const BaseVolunteerEvent = z.object({
-  name: z.string().min(1).max(100, 'Event name must be 100 characters or less'),
+export const createVolunteerEventSchema = z.object({
+  volunteerId: z.string().min(1, 'Volunteer ID is required'),
+  eventId: z.string().optional(), // Optional since it can be auto-generated or derived
+  name: z.string().min(1, 'Event name is required'),
   description: z.string().min(1, 'Description is required'),
   location: z.string().min(1, 'Location is required'),
-  requiredSkills: z.array(z.string()).min(1, 'At least one required skill must be specified'),
+  requiredSkills: z.array(z.string()).min(1, 'At least one skill is required'),
   urgency: z.enum(['High', 'Medium', 'Low'], {
     errorMap: () => ({ message: 'Urgency must be High, Medium, or Low' })
   }),
-  status: z.enum(['Started', 'Not Start', 'Done'], {
-    errorMap: () => ({ message: 'Status must be Started, Not Start, or Done' })
-  }),
-  eventDate: z.string().optional(), // ISO date string for when the event occurred/will occur
-  startTime: z.string().optional(), // ISO datetime string for event start time
-  endTime: z.string().optional(), // ISO datetime string for event end time
-  volunteerId: z.string().optional(), // Link to volunteer profile if needed
-  organizerId: z.string().optional(), // Link to organizer if needed
-  participationHours: z.number().min(0).optional(), // Hours contributed
-  notes: z.string().optional() // Additional notes about participation
+  eventDate: z.string().refine((date) => {
+    const d = new Date(date);
+    return !isNaN(d.getTime());
+  }, { message: 'Invalid date format' }),
+  status: z.enum(['Not Start', 'Started', 'Done']).default('Not Start'),
+  participationHours: z.number().min(0).optional(),
+  notes: z.string().optional()
 });
 
-export const createVolunteerEventSchema = BaseVolunteerEvent;
-export const updateVolunteerEventSchema = BaseVolunteerEvent.partial();
+export const updateVolunteerEventSchema = createVolunteerEventSchema.partial();
 
-// Query schema for filtering volunteer history
 export const listVolunteerHistoryQuerySchema = z.object({
+  volunteerId: z.preprocess(emptyToUndef, z.string().optional()),
+  eventId: z.preprocess(emptyToUndef, z.string().optional()),
   name: z.preprocess(emptyToUndef, z.string().optional()),
   location: z.preprocess(emptyToUndef, z.string().optional()),
   skill: z.preprocess(emptyToUndef, z.string().optional()),
   urgency: z.preprocess(emptyToUndef, z.enum(['High', 'Medium', 'Low']).optional()),
-  status: z.preprocess(emptyToUndef, z.enum(['Started', 'Not Start', 'Done']).optional()),
-  volunteerId: z.preprocess(emptyToUndef, z.string().optional()),
-  q: z.preprocess(emptyToUndef, z.string().optional()), // general search query
+  status: z.preprocess(emptyToUndef, z.enum(['Not Start', 'Started', 'Done']).optional()),
+  q: z.preprocess(emptyToUndef, z.string().optional()),
   limit: z.preprocess((v) => {
     const val = emptyToUndef(v);
     if (val === undefined) return undefined;

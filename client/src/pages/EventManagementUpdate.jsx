@@ -10,6 +10,7 @@ import {
   getEvent
 } from '../services/eventApi';
 import Banner from "./Banner";
+import Navigation from "../components/Navigation";
 
 const EventManagementUpdate = () => {
   //used when getting the specific event to edit
@@ -203,7 +204,7 @@ const EventManagementUpdate = () => {
 
       <div className="profile-container">
         <div>
-          <Banner />
+          <Navigation />
         </div>
         <div className="profile-card">
           {/* Header */}

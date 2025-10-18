@@ -1,5 +1,9 @@
 import React, { useEffect, useMemo, useState, useRef } from 'react';
 import { Link } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import * as matchingApi from "../services/matchingApi";
+import { listEvents } from "../services/eventApi";
+import { listProfiles } from "../services/profilesApi";
 import "../styles/components.scss";
 import "../styles/colors.scss";
 import Banner from "./Banner";
@@ -17,6 +21,7 @@ import {
   deleteProfile,
   getProfile
 } from '../services/profilesApi';
+import Navigation from "../components/Navigation";
 
 const MOCK_VOLUNTEERS = [
     {
@@ -138,6 +143,63 @@ const VolunteerMatching = () => {
   });
 
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [apiError, setApiError] = useState("");
+  const { user } = useAuth();
+
+  // Fetch real events and profiles from backend
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        setLoading(true);
+        setApiError("");
+        
+        // Fetch events
+        const eventsData = await listEvents({});
+        if (eventsData && eventsData.length > 0) {
+          // Convert backend event format to match the expected format
+          const formattedEvents = eventsData.map(event => ({
+            eventID: event.id,
+            eventName: event.eventName,
+            eventDescription: event.eventDescription,
+            location: event.location,
+            skills: event.requiredSkills || [],
+            urgency: event.urgency,
+            eventDate: new Date(event.eventDate)
+          }));
+          setEvents(formattedEvents);
+        }
+
+        // Fetch profiles (volunteers)
+        const profilesData = await listProfiles({});
+        if (profilesData && profilesData.length > 0) {
+          // Convert backend profile format to match the expected format
+          const formattedProfiles = profilesData.map(profile => ({
+            fullName: profile.name,
+            address1: profile.location?.address1 || '',
+            address2: profile.location?.address2 || '',
+            city: profile.location?.city || '',
+            state: profile.location?.state || '',
+            zipcode: profile.location?.zipcode || '',
+            skills: profile.skills || [],
+            preferences: profile.preferences?.notes || '',
+            availability: profile.availability?.days || []
+          }));
+          setVolunteers(formattedProfiles);
+        }
+      } catch (err) {
+        console.error("Failed to fetch data:", err);
+        setApiError("Using demo data. Backend connection failed.");
+        // Keep dummy data as fallback
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    if (user) {
+      fetchData();
+    }
+  }, [user]);
 
   // Choose what to filter by
   const filters= [
@@ -339,7 +401,7 @@ const VolunteerMatching = () => {
 
       <div className="profile-container">
         <div>
-          <Banner />
+          <Navigation />
         </div>
         <div className="profile-card">
           {/* Header */}

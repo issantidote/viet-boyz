@@ -3,7 +3,11 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import cors from 'cors';
 import profilesRouter from './routes/profiles.routes.js';
+import authRouter from './routes/auth.routes.js';
+import eventsRouter from './routes/events.routes.js'; 
 import volunteerHistoryRouter from './routes/volunteerHistory.routes.js';
+import matchingRouter from './routes/matching.routes.js';
+import notificationsRouter from './routes/notifications.routes.js';
 
 const app = express();
 
@@ -31,8 +35,12 @@ app.use((req, _res, next) => {
 });
 
 app.get('/health', (_req, res) => res.json({ ok: true }));
+app.use('/api/auth', authRouter); 
 app.use('/api/profiles', profilesRouter);
+app.use('/api/events', eventsRouter); 
 app.use('/api/volunteer-history', volunteerHistoryRouter);
+app.use('/api/matching', matchingRouter);
+app.use('/api/notifications', notificationsRouter);
 
 app.use((_req, res) => res.status(404).json({ error: 'Not found' }));
 app.use((err, _req, res, _next) => {
