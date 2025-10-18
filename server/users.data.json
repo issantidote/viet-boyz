@@ -1,0 +1,12 @@
+[
+  {
+    "id": "u_1760763611337",
+    "email": "final@example.com",
+    "passwordHash": "$2b$10$NQ0nA1kAz5uscqQepb4zxuo7o/pQYR4HjeJqEdqq1CTBaL7JLg/CG"
+  },
+  {
+    "id": "u_1760763674372",
+    "email": "test@example.com",
+    "passwordHash": "$2b$10$Rqrw1cc5bLIFRchnqmjyjeZeBQhh11KuEo9Rp6kMfMsi0O79gljaG"
+  }
+]

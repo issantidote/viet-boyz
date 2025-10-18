@@ -112,5 +112,62 @@
     "status": "Not Start",
     "participationHours": 4,
     "notes": "Test notes for volunteer participation"
+  },
+  {
+    "id": "e648d456-d3e9-4d56-8f8b-edc135dc3c9e",
+    "createdAt": "2025-10-18T04:56:41.440Z",
+    "updatedAt": "2025-10-18T04:56:41.440Z",
+    "userId": "default-user",
+    "volunteerId": "test-volunteer-123",
+    "name": "Park Cleanup",
+    "description": "Test event description for volunteer participation",
+    "location": "Memorial Park",
+    "requiredSkills": [
+      "Outdoor",
+      "Cleaning"
+    ],
+    "urgency": "High",
+    "eventDate": "2025-10-18T04:56:41.439Z",
+    "status": "Done",
+    "participationHours": 4,
+    "notes": "Test notes for volunteer participation"
+  },
+  {
+    "id": "e27ae103-7d3d-401b-a404-2d604c4bdbac",
+    "createdAt": "2025-10-18T04:56:41.445Z",
+    "updatedAt": "2025-10-18T04:56:41.445Z",
+    "userId": "default-user",
+    "volunteerId": "test-volunteer-123",
+    "name": "Food Drive",
+    "description": "Test event description for volunteer participation",
+    "location": "Community Center",
+    "requiredSkills": [
+      "Organization",
+      "Lifting"
+    ],
+    "urgency": "Medium",
+    "eventDate": "2025-10-18T04:56:41.439Z",
+    "status": "Started",
+    "participationHours": 4,
+    "notes": "Test notes for volunteer participation"
+  },
+  {
+    "id": "a97ef640-5129-44e6-8e24-3bd7d6b40000",
+    "createdAt": "2025-10-18T04:56:41.446Z",
+    "updatedAt": "2025-10-18T04:56:41.446Z",
+    "userId": "default-user",
+    "volunteerId": "test-volunteer-123",
+    "name": "Test Event 1760763401444",
+    "description": "Test event description for volunteer participation",
+    "location": "Test Location, Houston TX",
+    "requiredSkills": [
+      "Teamwork",
+      "Communication"
+    ],
+    "urgency": "Medium",
+    "eventDate": "2025-10-18T04:56:41.444Z",
+    "status": "Not Start",
+    "participationHours": 4,
+    "notes": "Test notes for volunteer participation"
   }
 ]
