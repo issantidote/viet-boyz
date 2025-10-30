@@ -2,8 +2,6 @@ import React, { useEffect, useMemo, useState, useRef } from 'react';
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import * as matchingApi from "../services/matchingApi";
-import { listEvents } from "../services/eventApi";
-import { listProfiles } from "../services/profilesApi";
 import "../styles/components.scss";
 import "../styles/colors.scss";
 import Banner from "./Banner";
@@ -110,10 +108,6 @@ const VolunteerMatching = () => {
   const [volunteers, setVolunteers] =
   //uses dummy placeholder data for now until truly hooked up to the db
   useState([]);
-
-
-
-  const [loading, setLoading] = useState(true);
 
   // helpers
   function msg(e) {
