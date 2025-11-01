@@ -1,0 +1,44 @@
+@import '../../styles/colors.css';
+
+html, body, #root {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+/* Landing page styles */
+.landing-page {
+  background: 
+    linear-gradient(to right, rgba(200, 16, 46, 0.7) 0%, 
+    rgba(200, 16, 46, 0.35) 20%,
+    rgba(200, 16, 46, 0) 35%),
+    url('../../assets/uh_hp_bg.jpg');;
+  background-size: cover;
+  background-attachment: fixed;
+  min-height: 100vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.landing-content {
+  text-align: right;
+  padding: 50px;
+  margin-top: 120px;
+  -webkit-text-stroke: 1.5px var(--custom-gray);
+}
+
+.landing-content h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #444034;
+}
+
+.landing-content p {
+  color: #444034;
+  line-height: 1.6;
+}
