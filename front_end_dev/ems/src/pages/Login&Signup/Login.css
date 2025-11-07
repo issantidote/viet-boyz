@@ -79,7 +79,7 @@
   
   
 .login-form-toggle .active {
-    background-color: #8c9657;
+    background-color: #C8102E;
     color: #444034;
   }
   
@@ -101,9 +101,9 @@
   
 .login-form button {
     padding: 10px;
-    background-color:#8c9657;
+    background-color:#C8102E;
     font-weight:bold;
-    color: #444034;
+    color: #FFFFFF;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -119,8 +119,8 @@
   }
   
 .login-form button:hover {
-  background-color: #b9c57f; 
-  border-color: #444034;
+  /* background-color: #b9c57f;  */
+  border-color: #FFFFFF;
   }
   
 .login-form a {

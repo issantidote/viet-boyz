@@ -10,7 +10,7 @@
 }
 
 .report_nav_buttons {
-  background-color: #8c9657;
+  background-color: #C8102E;
   border-radius: 10px;
   margin-bottom: 30px;
   width: 30vw; 
@@ -35,7 +35,7 @@
 
 .report_nav_buttons button:hover {
   background-color: #b9c57f;
-  border-color: #8c9657;
+  border-color: #C8102E;
 }
 
 @media (max-width: 768px) {
@@ -74,7 +74,7 @@
 }
 
 .report-buttons button {
-  background-color: #8c9657;
+  background-color: #C8102E;
   color: #444034;
   padding: 12px 25px;
   font-weight: bold;
@@ -84,7 +84,7 @@
 
 .report-buttons button:hover {
   background-color: #b9c57f;
-  border-color: #8c9657;
+  border-color: #C8102E;
 }
 
 .button-row {
@@ -118,13 +118,13 @@
 }
 
 .report_head, .report_entry {
-  border: 1px solid #8c9657; 
+  border: 1px solid #C8102E; 
   padding: 12px;
   text-align: left;
   background-color: #fff8e1;
 }
 
 .report_head {
-  background-color: #8c9657;
+  background-color: #C8102E;
   color: #fff;
 }

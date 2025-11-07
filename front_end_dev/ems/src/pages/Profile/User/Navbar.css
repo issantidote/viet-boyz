@@ -1,6 +1,6 @@
 
 .navbar {
-    background-color: #8c9657; 
+    background-color: #C8102E; 
     color: rgb(68, 64, 52); 
     padding: 10px 20px; 
     display: flex; 
@@ -30,7 +30,7 @@
   
   .navbar a {
     text-decoration: none; 
-    color: #444034; 
+    color: #FFFFFF; 
     font-weight: bold; 
     transition: color 0.3s; 
   } 
