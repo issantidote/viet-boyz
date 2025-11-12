@@ -85,7 +85,7 @@ const AdminProfile = () => {
       <p><strong>Email:</strong> {admin.email}</p>
 
       
-      <div className="button-container">
+      <div className="profile-container">
         <Link to="/">
           <button className="btn">Home</button>
         </Link>

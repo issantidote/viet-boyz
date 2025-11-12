@@ -149,8 +149,9 @@ const AdminReports = () => {
   };
 
   return (
-    <div className="root">
-      <div className="report_nav_buttons">
+    <div className="profile-container">
+      <h2>Admin Reports</h2>
+      <div className="">
         <Link to="/">
           <button>Home</button>
         </Link>
@@ -159,8 +160,6 @@ const AdminReports = () => {
         </Link>
         <button onClick={handleLogout}>Logout</button>
       </div>
-
-      <h1>Admin Reports</h1>
 
       <div className="dropdown-container">
         <label htmlFor="reportSelect">Select Report: </label>

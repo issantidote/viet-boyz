@@ -25,27 +25,28 @@
 
 
 .profile-container {
-  padding: 20px;
+  /* padding: 20px; */
   background-color: #fff;
   margin: 20px 0;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 4px 24px rgba(0, 0, 0, 0.2);
-  width: 80%;
-  max-width: 500px;
+  /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 4px 24px rgba(0, 0, 0, 0.2); */
+  width: 100%;
+  /* max-width: 500px; */
   text-align: center; 
   transition: all 0.3s ease-in-out;
+  align-items: center;
 }
 
-.profile-container:hover {
+/* .profile-container:hover {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1), 0 8px 48px rgba(0, 0, 0, 0.2);
-}
+} */
 
 .profile-container h2 {
   margin-top: 0;
   font-size: 40px;
   font-style: oblique;
   
-  color: #9ac3ec;
+  color: #C8102E;
 }
 
 
@@ -108,7 +109,7 @@
   margin: 10px 0;
   background-color: #444034;;
   color:white;
-  border: 1px solid #6406759a;
+  border: 1px solid #888B8D;
   border-radius: 5px;
   font-size: 16px;
   transition: all 0.3s ease;
@@ -252,7 +253,7 @@ input[type="date"]:focus {
 }
 
 .button-container .btn {
-  background-color: #6406759a; 
+  background-color: #888B8D; 
   color: white;
   padding: 12px 24px;
   border: none;
