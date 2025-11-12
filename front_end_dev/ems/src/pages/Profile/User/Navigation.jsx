@@ -23,7 +23,7 @@ function Navbar() {
         <nav className="navbar">
             <div className="nav_buttons"> 
               <ul>
-                <li><Link to="/">Home</Link></li>
+                {/* <li><Link to="/">Home</Link></li> */}
                 <li><Link to="/user">Profile</Link></li>
                 <li><Link to="/notifications">Notifications</Link></li>
                 <li><Link to="/history">History</Link></li>

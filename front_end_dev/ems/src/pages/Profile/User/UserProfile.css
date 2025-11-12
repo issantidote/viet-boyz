@@ -9,8 +9,8 @@
   width: 100%;
   max-width: 700px; 
   padding: 20px;
-  background-color: #8c9657;
-  border: 2px solid #8c9657; 
+  background-color: #C8102E;
+  border: 2px solid #C8102E; 
   border-radius: 15px; 
 }
 
@@ -24,30 +24,30 @@
   width: 100%;
   padding: 8px;
   text-align: center;
-  border: 1px solid #444034;
+  border: 1px solid #FFFFFF;
   cursor: pointer;
-  background-color: #f0e7c6; 
-  color: #444034; 
+  background-color: #444034; 
+  color: #FFFFFF; 
 }
 
 .dropdown-content {
   display: block;
   position: absolute;
-  background-color: #f0e7c6;
+  background-color: #444034;
   min-width: 100%;
-  border: 1px solid #f0e7c6;
+  border: 1px solid #FFFFFF;
   z-index: 1;
   max-height: 200px;
   overflow-y: auto;
   margin-top: 2px;
-  color: #444034;
+  color: #FFFFFF;
 }
 
 .checkbox-label {
   display: block;
   padding: 5px;
   cursor: pointer;
-  color: #444034; 
+  color: #FFFFFF; 
 }
 
 /* spacing to input fields */
@@ -56,16 +56,16 @@
   color:white;
   width: 100%;
   padding: 8px;
-  border: 1px solid #444034;
+  border: 1px solid #FFFFFF;
   border-radius: 4px;
 }
 
 /* submit button */
 .submit-button {
   padding: 10px 15px;
-  background-color: #f0e7c6; 
-  color: #444034; 
-  border: 1px solid #8c9657; 
+  background-color: #444034; 
+  color: #FFFFFF; 
+  border: 1px solid #C8102E; 
   border-radius: 4px;
   cursor: pointer;
   text-align: center; 
@@ -74,29 +74,29 @@
 
 /* button hover effect */
 .submit-button:hover {
-  background-color: #b9c57f; 
+  /* background-color: #b9c57f;  */
   color: #f0e7c6; 
-  border-color: #8c9657; 
+  border-color: #C8102E; 
 }
 
 /* profile information display section */
 .profile-info-section {
-  background-color: #8c9657;
+  background-color: #C8102E;
   display: flex;
   flex-direction: column;
   gap: 2px;
   padding: 20px;
-  border: 5px solid #444034; 
+  border: 5px solid #FFFFFF; 
   border-radius: 10px; 
 }
 
 .profile-info-section p {
   font-size: 16px;
-  color: #444034;
+  color: #FFFFFF;
 }
 
 .profile-info-section p strong {
-  color: #444034;
+  color: #FFFFFF;
 }
 
 /* availability list container */
@@ -113,7 +113,7 @@
   align-items: center;
   padding: 5px 10px;
   border-bottom: 1px solid #f0e7c6;
-  color: #444034;
+  color: #FFFFFF;
 }
 
 /* X for availability dates */
@@ -141,9 +141,9 @@
   margin-top: 30px;
   padding: 10px 15px;
   font-weight: bold; 
-  background-color: #8c9657; 
-  color: #444034; 
-  border: 1px solid #8c9657; 
+  background-color: #C8102E; 
+  color: #FFFFFF; 
+  border: 1px solid #C8102E; 
   border-radius: 4px;
   cursor: pointer;
   text-align: center; 
@@ -152,17 +152,17 @@
 
 /* button hover effect */
 .edit-profile-button:hover {
-  background-color: #b9c57f; 
+  /* background-color: #b9c57f;  */
   color: #f0e7c6; 
-  border-color: #8c9657; 
+  border-color: #C8102E; 
 }
 
 .add-button{
   padding: 10px 15px;
   margin-top: 15px;
-  background-color: #f0e7c6; 
-  color: #444034; 
-  border: 1px solid #8c9657; 
+  background-color: #444034; 
+  color: #FFFFFF; 
+  border: 1px solid #C8102E; 
   border-radius: 4px;
   cursor: pointer;
   text-align: center; 
@@ -170,9 +170,9 @@
 }
 
 .add-button:hover {
-  background-color: #b9c57f; 
+  /* background-color: #b9c57f;  */
   color: #f0e7c6; 
-  border-color: #8c9657; 
+  border-color: #C8102E; 
 }
 
 

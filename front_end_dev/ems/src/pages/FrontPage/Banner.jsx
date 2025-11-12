@@ -18,9 +18,9 @@ const Banner = () => {
         <div>
           <Link to="/login" className="banner-link">Login</Link>
         </div>
-        <div>
+        {/* <div>
           <Link to="/donate" className="banner-link">Donate</Link>
-        </div>
+        </div> */}
         {/* <div>
           <Link to="/profile" className="banner-link">Profile</Link>
         </div>
