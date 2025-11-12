@@ -17,11 +17,11 @@
   }
   
 .login-form-container {
-    background-color: #f0e7c6; 
+    background-color: white; 
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 300px;
+    width: 380px;
     position: relative;
   }
   
@@ -37,7 +37,7 @@
     background-color: transparent;  
     border: none;
     border-radius: 5px;  
-    color: #333;  
+    color: black;  /* Changed from #333 to black */
     cursor: pointer;
     display: flex;
     justify-content: center;
@@ -70,6 +70,7 @@
     cursor: pointer;
     font-size: 14px;
     border-radius: 10px 10px 0 0;
+    color: black;  /* Added black color */
   }
   
 .login-form-toggle button:focus {
@@ -80,7 +81,7 @@
   
 .login-form-toggle .active {
     background-color: #C8102E;
-    color: #444034;
+    color: black;  /* Changed from #444034 to black (Note: red background with black text may have contrast issues - consider white if readability is poor) */
   }
   
 .login-form {
@@ -90,6 +91,7 @@
   
 .login-form h2 {
     margin-bottom: 20px;
+    color: black;  /* Added black color */
   }
   
 .login-form input {
@@ -97,6 +99,7 @@
     margin-bottom: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
+    color: black;  /* Added black color */
   }
   
 .login-form button {
@@ -135,6 +138,7 @@
 .login-form p {
     text-align: center;
     padding-top: 10px;
+    color: black;  /* Added black color */
   }
   
   .error {
