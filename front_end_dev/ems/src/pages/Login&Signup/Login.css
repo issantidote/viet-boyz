@@ -1,3 +1,4 @@
+@import '../../styles/colors.css';
 
 .modal-overlay {
     position: fixed;  
@@ -37,7 +38,7 @@
     background-color: transparent;  
     border: none;
     border-radius: 5px;  
-    color: black;  /* Changed from #333 to black */
+    color: black; 
     cursor: pointer;
     display: flex;
     justify-content: center;
@@ -70,7 +71,7 @@
     cursor: pointer;
     font-size: 14px;
     border-radius: 10px 10px 0 0;
-    color: black;  /* Added black color */
+    color: black;
   }
   
 .login-form-toggle button:focus {
@@ -81,7 +82,7 @@
   
 .login-form-toggle .active {
     background-color: #C8102E;
-    color: black;  /* Changed from #444034 to black (Note: red background with black text may have contrast issues - consider white if readability is poor) */
+    color: black;
   }
   
 .login-form {
@@ -91,7 +92,7 @@
   
 .login-form h2 {
     margin-bottom: 20px;
-    color: black;  /* Added black color */
+    color: black;
   }
   
 .login-form input {
@@ -99,7 +100,7 @@
     margin-bottom: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
-    color: black;  /* Added black color */
+    color: black;
   }
   
 .login-form button {
@@ -122,7 +123,6 @@
   }
   
 .login-form button:hover {
-  /* background-color: #b9c57f;  */
   border-color: #FFFFFF;
   }
   
@@ -138,7 +138,7 @@
 .login-form p {
     text-align: center;
     padding-top: 10px;
-    color: black;  /* Added black color */
+    color: black; 
   }
   
   .error {
@@ -146,3 +146,46 @@
     font-size: 14px; 
     margin-top: 10px; 
   }
+
+/*From here - For password checking*/
+.password-checklist {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.check-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.check-item.fail {
+  color: red;
+}
+
+.check-item.pass {
+  color: green;
+}
+
+.check-icon {
+  font-weight: bold;
+}
+
+.password-explanation {
+  color: black;
+  margin-top: 8px;
+  font-size: 13px;
+  line-height: 1.3;
+  text-align: left;
+}
+
+.disabled-btn {
+  opacity: 0.5;
+  cursor: not-allowed !important;
+}
+
+.disabled-btn:hover {
+  background-color: var(--chocolate);
+}

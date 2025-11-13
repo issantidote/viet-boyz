@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import './Login.css'; 
 import Home from '../FrontPage/home';
 
+
 function Login() {
   const location = useLocation();
   const [isSignUp, setIsSignUp] = useState(location.state?.signup || false);
@@ -13,17 +14,36 @@ function Login() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  // This is for the password validation checks
+  const forbiddenSpecials = /[<>&\\"'()\[\]{};]/;
+
+  const passwordChecks = [
+    {
+      label: "At least 8 characters in length",
+      check: (pw) => pw.length >= 8
+    },
+    {
+      label: "At least 1 digit",
+      check: (pw) => /\d/.test(pw)
+    },
+    {
+      label: "At least 1 allowed special character",
+      check: (pw) =>
+        /[^A-Za-z0-9]/.test(pw) && !forbiddenSpecials.test(pw)
+    },
+    {
+      label: "Both password fields match",
+      check: () => password.length > 0 && password === confirmPassword
+    }
+  ];
+
   // Closing login/signup will redirect to the homepage
   const closeModal = () => {
     setIsModalOpen(false);
     navigate('/');
   };
 
-  const handleOverlayClick = (e) => {
-    if (e.target === e.currentTarget) {
-      closeModal();
-    }
-  };
+  const handleOverlayClick = () => {};
 
   const handleKeyDown = (e) => {
     if (e.key === 'Escape') {
@@ -132,6 +152,15 @@ function Login() {
     }
   };
 
+  // Determine if all password checks pass
+  const allChecksPass = isSignUp
+    ? passwordChecks.every((item) => {
+      // special handling for matching passwords check
+      if (item.label === "Both password fields match") return item.check();
+      return item.check(password);
+    })
+    : true;
+
   return (
     <>
       <Home />
@@ -175,6 +204,35 @@ function Login() {
                   required
                 />
 
+                {/* Password checklist (shown only on sign-up) */}
+                {isSignUp && (
+                  <div className="password-checklist">
+                    {passwordChecks.map((item, i) => {
+                      const passed = item.check(password);
+                      const matchPassed =
+                        item.label === "Both password fields match"
+                          ? item.check()
+                          : passed;
+
+                      return (
+                        <div
+                          key={i}
+                          className={`check-item ${matchPassed ? "pass" : "fail"}`}
+                        >
+                          <span className="check-icon">
+                            {matchPassed ? "✓" : "✗"}
+                          </span>
+                          <span>{item.label}</span>
+                        </div>
+                      );
+                    })}
+
+                    <p className="password-explanation">
+                      Special characters not allowed: &lt;, &gt;, &, \, ", ', (, ), [, ], {"{"}, {"}"}, ;
+                    </p>
+                  </div>
+                )}
+
                 {isSignUp && (
                   <input
                     type="password"
@@ -185,7 +243,14 @@ function Login() {
                   />
                 )}
 
-                <button type="submit">{isSignUp ? 'Sign Up' : 'Login'}</button>
+
+                <button
+                  type="submit"
+                  disabled={isSignUp && !allChecksPass}
+                  className={isSignUp && !allChecksPass ? "disabled-btn" : ""}
+                >
+                  {isSignUp ? 'Sign Up' : 'Login'}
+                </button>
 
                 {!isSignUp && <a href="#">Forgot password?</a>}
 
