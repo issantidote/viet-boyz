@@ -18,27 +18,6 @@ const Banner = () => {
         <div>
           <Link to="/login" className="banner-link">Login</Link>
         </div>
-        {/* <div>
-          <Link to="/donate" className="banner-link">Donate</Link>
-        </div> */}
-        {/* <div>
-          <Link to="/profile" className="banner-link">Profile</Link>
-        </div>
-        <div>
-          <Link to="/volunteer-history" className="banner-link">Volunteer History</Link>
-        </div>
-        <div>
-          
-          <Link to="/event-management" className="banner-link">Create an Event</Link>
-        </div>
-        <div>
-          
-          <Link to="/event-management/edit" className="banner-link">Edit an Event</Link>
-        </div>
-        <div>
-
-          <Link to="/volunteer-matching" className="banner-link">Match Volunteers</Link>
-        </div> */}
       </div>
     </>
   );
