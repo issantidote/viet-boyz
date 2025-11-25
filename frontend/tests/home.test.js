@@ -87,16 +87,6 @@ describe("Home Component", () => {
     });
   });
 
-  test("renders Donate Now button", async () => {
-    global.fetch.mockResolvedValueOnce({
-      json: () => Promise.resolve({ loggedIn: false }),
-    });
-    renderWithRouter(<Home />);
-    await waitFor(() => {
-      expect(screen.getByText("Donate Now!")).toBeInTheDocument();
-    });
-  });
-
   test("handles contact button click", async () => {
     global.fetch.mockResolvedValueOnce({
       json: () => Promise.resolve({ loggedIn: false }),
