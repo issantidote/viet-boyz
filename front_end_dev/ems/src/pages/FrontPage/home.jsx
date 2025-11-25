@@ -41,11 +41,12 @@ const Home = () => {
         <Banner />
       </div>
       <div className="landing-content">
-        <h1>Volunteer Management System</h1>
-        <p style={{ fontSize: '1.2rem'}}>
-          Welcome to our volunteer coordination platform. 
-          Connect with opportunities and make a difference in your community.
+        <h1>Volunteer Opportunities</h1>
+        <p>
+          Welcome to our volunteer coordination platform! <br />
+          Connect with various student organizations at the University of Houston.
         </p>
+        
         
         <div style={{ 
           display: 'flex', 
