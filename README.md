@@ -6,9 +6,8 @@ A full-stack web app that connects volunteers with events based on preferences a
 ### Setup
 **Note!** 
 Install dependencies with **npm install** if necessary <br>
-start the frontend with **npm run dev** <br>
-start the backend server with **node server.js** <br>
-ems is the name of the website directory, it stands for event management system
+start the frontend with **cd frontend** and then **npm run dev** <br>
+start the backend server with **cd backend** and then **node server.js** <br>
 
 You can access the user profile management, volunteer history, and notification pages by logging in either as an admin or a volunteer
 
